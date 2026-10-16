@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+    <style>
+            /* Asegúrate de que el color del texto no cambie al cambiar de idioma */
+            body {
+                color: black !important;
+            }
+        </style>
+    </head>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init('covrm8hjTl7DyCfoi'); // Tu clave pública de EmailJS
+        })();
+    </script>
+    
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Harmony excursions </title>
+
+    <script src="https://kit.fontawesome.com/283335a286.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arima+Madurai:wght@700&family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <style>
+        
+
+
+
+        /* Estilos para el menú y el botón de cierre */
+        #menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 80%; /* Ocupa toda la altura de la ventana */
+            background-color: #06070a;
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+           
+        } 
+        
+        /*         
+        funcionLIDAD DE LOS BOTONES DE BUSCAR IMPORTANTE  */
+        .hidden {
+    display: none;
+}
+html[lang="es"] {
+    color: red;
+}
+
+
+
+        #menu a {
+            display: block;
+            color: white;
+            margin: 20px 0;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        #menu a:hover {
+            color: #faf7f8;
+        }
+
+        #menu-icon {
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 1000;
+            top: 20px;
+            left: 1px;
+        }
+
+        #close-btn {
+            font-size: 30px;
+            cursor: pointer;
+       
+            top: 20px;
+            right: 20px;
+        }
+
+        /* Asegura que el cuerpo no se mueva mientras el menú está visible */
+        body.menu-active {
+            overflow: hidden;
+        }
+        .encabezado {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.logo h2 {
+    margin: 100; /* Elimina márgenes superiores e inferiores */
+    padding: 0; /* Asegúrate de que no hay espacio adicional */
+    font-size: 1.8em;
+    text-align: center;
+    white-space: nowrap;
+}
+
+    </style>
+    
+</head>
+<body>
+      <!-- Burbujita de WhatsApp -->
+  <a href="https://wa.me/18092514054?text=I%20come%20from%20Harmony%20Excursions%20and%20I%20want%20information" target="_blank" class="whatsapp-bubble">
+        <img src="paginas/WhatsApp.svg.webp" alt="WhatsApp">
+  </a>
+
+    <script>
+        const btn = document.getElementById('button');
+    
+        document.getElementById('contactForm')
+            .addEventListener('submit', function(event) {
+                event.preventDefault();
+    
+                btn.textContent = 'Enviando...';
+    
+                const serviceID = 'default_service'; // Reemplaza con tu Service ID si es diferente
+                const templateID = 'template_w3ry1ma'; // Reemplaza con tu Template ID
+    
+                emailjs.sendForm(serviceID, templateID, this)
+                    .then(() => {
+                        btn.textContent = 'Enviar';
+                        alert('¡Mensaje enviado correctamente!');
+                        document.getElementById('contactForm').reset(); // Limpia el formulario
+                    }, (err) => {
+                        btn.textContent = 'Enviar';
+                        alert('Error al enviar el mensaje. Intenta nuevamente.');
+                        console.error('Error:', err);
+                    });
+            });
+    </script>
+    
+    <header class="encabezado">
+        <div class="contenedor-navegacion">
+            <div class="contenido-navegacion contenedor">
+                <div class="logo">
+                    <h2 style="white-space: nowrap;">
+                        <span style="color: #FFFFFF;">Harmony</span>
+                        <span style="color: #0033A0;">exc</span>
+                        <span style="color: #FFFFFF;">ursi</span>
+                        <span style="color: #D50032;">ons </span>
+                    </h2>
+                </div>
+                
+                <!-- Menú y botón de hamburguesa -->
+                <div class="menu-container">
+                    <span id="menu-icon">☰</span>
+                    <div id="menu">
+                        <span id="close-btn" class="close-btn">&times;</span>
+                        <a href="sobre-nosotros.html">About Us</a>
+                        <!-- Puedes agregar más enlaces aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script>
+        const menuIcon = document.getElementById('menu-icon');
+        const menu = document.getElementById('menu');
+        const closeBtn = document.getElementById('close-btn');
+        const body = document.body;
+
+        // Mostrar el menú al hacer clic en el icono
+        menuIcon.addEventListener('click', () => {
+            menu.style.display = 'block';
+            body.classList.add('menu-active'); // Desactiva el desplazamiento del cuerpo
+        });
+
+        // Cerrar el menú al hacer clic en la "X"
+        closeBtn.addEventListener('click', () => {
+            menu.style.display = 'none';
+            body.classList.remove('menu-active'); // Vuelve a habilitar el desplazamiento del cuerpo
+        });
+    </script>
+
+</body>
+</html>
+
+        </style>
+    </head>
+    <body>
+    </div>
+                
+    <hr class="decoracion-video">
+    <source src="assets/img/videopagina1 (1) (1) (1).mp4">
+</video>
+<div class="texto-nosotros">
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 50px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
+          </div>
+    <video autoplay loop muted>
+    
+
+        <source src="assets/img/videopagina1 (1) (1) (1).mp4">
+    </video>
+    
+    
+    <hr class="decoracion-video"> <!-- Línea decorativa -->
+</div>
+    
+        <!-- Sección Nosotros -->
+        <div class="contenedor-nosotros contenedor">
+            <div class="texto-nosotros">
+           
+                <h1>Harmony excursions</h1>
+                <p> Discover paradise with Harmony excursions. We take you to the breathtaking Saona and Catalina Islands, where white sand beaches, crystal clear waters and vibrant coral reefs await you. Enjoy unique diving and relaxation experiences, accompanied by expert guides that will make your visit an unforgettable memory. The Caribbean is calling you!
+                </p>
+                <a href="#" class="btn btn-azul">Return</a>
+            </div>
+            <div class="imagenes-nosotros">
+                <div class="imagen1">
+                    <img src="assets/img/dominican-republic-1884286_1920.jpg" alt="foto playa primera">
+                </div>
+                <div class="imagenes2">
+                    <img src="assets/img/basilica.jpg" alt="basilica foto">
+                    <img src="assets/img/istockphoto-681917346-612x612.jpg" alt="foto de delfines">
+                </div>
+            </div>
+        </div>
+    
+        <!-- Botones para filtrar -->
+        <style>
+        
+    /* Estilos para la burbujita de WhatsApp */
+.whatsapp-bubble {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #25d366;
+  border-radius: 50%;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-bubble:hover {
+  transform: scale(1.1);
+}
+
+.whatsapp-bubble img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+            /* Contenedor de los botones */
+            .botones-container {
+                text-align: center;
+            }
+    
+            /* Estilos generales para los botones */
+            .btn {
+                background-color: #00A8E8;
+                color: white;
+                padding: 10px 20px;
+                margin: 5px;
+                border: 2px solid #0074B7; /* Borde con un color más oscuro */
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* Sombra para el relieve */
+            }
+    
+            /* Efecto hover */
+            .btn:hover {
+                background-color: #0074B7;
+                box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3), inset 2px 2px 5px rgba(255, 255, 255, 0.2); /* Sombra más pronunciada */
+            }
+    
+            /* Efecto cuando se presiona */
+            .btn:active {
+                transform: translateY(2px); /* Simula el efecto de presión */
+                box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3); /* Relieve invertido */
+            }
+        </style>
+        <div>
+            
+            <div class="imagenes-nosotros  "></div>
+            <button class="todos btn  " style="background-color: #00A8E8; color: white;">all</button>
+            <button class="buggys btn" style="background-color: #00A8E8; color: white;">Buggys</button>
+            <button class="Island btn" style="background-color: #00A8E8; color: white;">Island</button>
+            <button class="tours btn" style="background-color: #00A8E8; color: white;">tours</button>
+
+        </div>
+    
+   <!-- Contenedor de platillos (todos dentro de una misma clase) -->
+<div class="platillos">
+    <!-- Primer fila -->
+    <div class="platilloos Island">
+        <a href="isla-saona.html">
+            <img src="assets/img/saona3.webp" alt="Saona Island">
+        </a>
+        <h2><a href="isla-saona.html">Saona Island</a></h2>
+        <p>Explore the beauty of Saona Island.</p>
+    </div>
+
+  
+
+    <div class="platilloo buggy">
+        <a href="Aventura-en-buggy.html">
+            <img src="assets/img/buggys22producto.webp" alt="Aventura en buggy">
+        </a>
+        <h2><a href="Aventura-en-buggy.html">Buggy adventure</a></h2>
+        <p>Experience the thrill of a buggy adventure.</p>
+    </div>
+
+    <!-- Segunda fila -->
+    <div class="platilloos Island">
+        <a href="isla-catalina-and-diving.html">
+            <img src="assets/img/snorkel-arrecifes-isla-saona.jpg" alt="catalina Island and diving ">
+        </a>
+        <h2><a href="isla-catalina-and-diving.html">Catalina Island diving and snorkeling</a></h2>
+        <p>Explore the beauty of Catalina Island.</p>
+    </div>
+
+    <div class="platilloos Island">
+        <a href="isla-catalina-and-snorkel.html">
+            <img src="assets/img/Isla-Catalina2.jpg" alt="isla-catalina-and-snorkel">
+        </a>
+        <h2><a href="isla-catalina-and-snorkel.html">isla catalina and snorkel</a></h2>
+        <p>Enjoy the crystal clear waters in Catalina.</p>
+    </div>
+
+    <div class="platilloo Island">
+        <a href="samana-island.html">
+            <img src="assets/img/cayo-levantado-samana.jpg" alt="samana-island">
+            
+        </a>
+        <h2><a href="samana-island.html">Samana island</a></h2>
+        <p>Explore the beauty of Samana island.</p>
+    </div>
+
+    <!-- Tercera fila -->
+    <div class="platilloos Island">
+        <a href="private-speedboat-excursion-to-saona-island.html">
+            <img src="assets/img/64809720e520e-islasaonaexcursionlanchaiway.jpg" alt="catalina Island and diving ">
+        </a>
+        <h2><a href="private-speedboat-excursion-to-saona-island.html">Private speedboat excursion to Saona Island</a></h2>
+        <p>EXPERIENCE A PRIVATE MARITIME EXCURSION TO SAOAN ISLAND .</p>
+    </div>
+
+    <div class="platilloos Island">
+        <a href="saona-island-excursion-private-boat-from-10-to-60-people-all-incluided.html">
+            <img src="assets/img/WhatsApp-Image-2024-02-25-at-6.30.01-PM-scaled-e1708913739654 (2).jpeg" alt="isla-catalina-and-snorkel">
+        </a>
+        <h2><a href="saona-island-excursion-private-boat-from-10-to-60-people-all-incluided.html">saona island excursion private boat from 10 to 60 people-all incluided</a></h2>
+        <p> Come and enjoy the saona island by private boat from 10 to 60
+            .</p>
+    </div>
+    <div class="platilloos tours">
+        <a href="Samanawithwhales.html">
+            <img src="assets/img/unspecified-43.jpg" alt="samana Cayo LEVANTADO Y CASCADA EL LIMON FROM PUNTACANA">
+        </a>
+        <h2><a href="Samanawithwhales.html">Saman with whale</a></h2>
+        <p>Saman with whale
+            .</p>
+    </div>
+    <div class="platilloos tours">
+        <a href="HIGUEY CITY TOUR PRIVATE.html">
+            <img src="assets/img/Basílica-de-Nuestra-Señora-de-la-Altagracia-672x372-1.jpg" alt="isla-catalina-and-snorkel">
+        </a>
+        <h2><a href="HIGUEY CITY TOUR PRIVATE.html">HIGUEY CITY TOUR PRIVATE</a></h2>
+        <p>Explore Higüey on an exclusive tour 
+            .</p>
+    </div>
+    <div class="platilloos tours">
+        <a href="Santo Domingo.html">
+            <img src="assets/img/santo-domingo-tour-1.jpg" alt="Santo Domingo">
+        </a>
+        <h2><a href="Santo Domingo.html">Santo Domingo</a></h2>
+        <p>Enjoy Santo Domingo, a unique experience of history and culture.
+</p>
+    </div>
+    <div class="platilloos tours">
+        <a href="delfines.html">
+            <img src="assets/img/638-2.jpg" alt="delfines">
+        </a>
+        <h2><a href="delfines.html">Dolphins</a></h2>
+        <p>Enjoy an unforgettable experience.
+            .</p>
+    </div>
+    <div class="platilloos tours">
+        <a href="Hacienda park.html">
+            <img src="assets/img/telesilla-hacienda-park.webp" alt="Hacienda park">
+        </a>
+        <h2><a href="Hacienda park.html">Hacienda park</a></h2>
+        <p>Enjoy Hacienda Park, adventure and nature in one place.
+            .</p>
+    </div>
+    <div class="platilloos tours">
+        <a href="Coco bongo.html">
+            <img src="assets/img/photographed-alain-strassberg.jpg" alt="Coco bongo">
+        </a>
+        <h2><a href="Coco bongo.html">Coco bongo </a></h2>
+        <p>Coco Bongo, the place where the party never ends, with impressive shows and a unique energy. 
+            .</p>
+    </div>
+    <div class="platilloos tours">
+        <a href="SHOPPING.html">
+            <img src="assets/img/Mercado-Modelo-@conoce_rd-edited-scaled.jpg" alt="SHOPPING">
+        </a>
+        <h2><a href="SHOPPING.html">Shopping </a></h2>
+        <p>Enjoy a unique shopping experience with a variety of stores and exclusive products.</p>
+    </div>
+    <div class="platilloos tours">
+        <a href="haitises.html">
+            <img src="assets/img/haitises1.webp" alt="SHOPPING">
+        </a>
+        <h2><a href="haitises.html">haitises </a></h2>
+        <p>Explore the Haitises, a natural paradise full of breathtaking landscapes and mangroves. </p>
+    </div>
+    <div class="platilloos tours">
+        <a href="titanboatpuntacana.html">
+            <img src="paginas/Punta-Cana-Party-Boat-Tour.jpg" alt="SHOPPING">
+        </a>
+        <h2><a href="titanboatpuntacana.html">Titan boat puntacana. </a></h2>
+        <p>Enjoy an amazing experience on a titan boat puntacana. </p>
+        
+    </div>
+    
+ <div class="platilloos tours buggy">
+        <a href="polari.html">
+            <img src="assets/img/buggys3producto.webp" alt="SHOPPING">
+        </a>
+        <h2><a href="polari.html">Polaris </a></h2>
+        <p>Enjoy an amazing experience on Polaris. </p>
+    </div>
+
+
+
+<script>
+    
+    // Función para mostrar los diferentes platillos
+    function mostrarPlatos(clase) {
+        const todosPlatillos = document.querySelectorAll('.platilloo, .platilloos');
+        todosPlatillos.forEach(platillo => platillo.classList.add('hidden')); // Ocultar todos
+        const seleccionados = document.querySelectorAll(clase);
+        seleccionados.forEach(platillo => platillo.classList.remove('hidden')); // Mostrar seleccionados
+    }
+
+    // Botón "Todos" muestra todos los platos
+    document.querySelector('.todos').addEventListener('click', () => {
+        const todosPlatillos = document.querySelectorAll('.platilloo, .platilloos');
+        todosPlatillos.forEach(platillo => platillo.classList.remove('hidden')); // Mostrar todos
+    });
+
+    // Botón "Buggys" muestra solo los platos de clase "buggy"
+    document.querySelector('.buggys').addEventListener('click', () => {
+        mostrarPlatos('.platilloo.buggy');
+    });
+
+    // Botón "Island" muestra solo los platos de clase "Island"
+    document.querySelector('.Island').addEventListener('click', () => {
+        mostrarPlatos('.platilloos.Island');
+    });
+
+    // Botón "Tours" muestra solo los platos de clase "tours"
+    document.querySelector('.tours').addEventListener('click', () => {
+        mostrarPlatos('.platilloos.tours');
+    });
+</script>
+
+        
+     
+    
+
+    
+    </div> <!-- Cierre de contenedor de platillos -->
+    
+    <script>
+        // Función para mostrar platos por clase
+        function mostrarPlatos(clase) {
+            const todosPlatillos = document.querySelectorAll('.platilloo, .platilloos');
+            todosPlatillos.forEach(platillo => platillo.classList.add('hidden')); // Ocultar todos
+            const seleccionados = document.querySelectorAll(clase);
+            seleccionados.forEach(platillo => platillo.classList.remove('hidden')); // Mostrar seleccionados
+        }
+    
+        // Botón "Todos" muestra todos los platos
+        document.querySelector('.todos').addEventListener('click', () => {
+            const todosPlatillos = document.querySelectorAll('.platilloo, .platilloos');
+            todosPlatillos.forEach(platillo => platillo.classList.remove('hidden')); // Mostrar todos
+        });
+    
+        // Botón "Buggys" muestra solo los platos de clase "buggy"
+        document.querySelector('.buggys').addEventListener('click', () => {
+            mostrarPlatos('.buggy');
+        });
+    
+        // Botón "Island" muestra solo los platos de clase "Island"
+        document.querySelector('.Island').addEventListener('click', () => {
+            mostrarPlatos('.Island');
+        });
+           // Botón "Island" muestra solo los platos de clase "Island"
+           document.querySelector('.tours').addEventListener('click', () => {
+            mostrarPlatos('.tours');
+        });
+    </script>
+<section id="ultima-seccion" style="background-color: #f4f4f9; padding: 50px 20px;">
+    <div class="container" style="text-align: center;">
+        <h2 class="animado" style="font-size: 40px; font-weight: bold;">
+            <span style="color: #0033A0;">¡</span>
+
+            <span style="color: #0712ed; text-shadow: 2px 2px 4px black;">Your next </span>
+
+
+            <span style="color: #FFFFFF; text-shadow: 2px 2px 4px black;"> adventure</span>
+
+            <span style="color: #e90a0a; text-shadow: 2px 2px 4px black;">is waiting for you!</span>
+
+
+        </h2>
+    </div>
+    
+</section>
+
+        </h2>
+        <p class="animado" style="font-size: 20px; color: #555; margin: 20px 0; line-height: 1.6;">
+            Explore breathtaking landscapes, enjoy unique moments and create memories that will last a lifetime. With our excursions, every step will be a discovery. Whether you are looking for a hike in the mountains, a walk on the beach or a cultural tour, we have the perfect experience for you.        </p>
+
+        <!-- Mapa de la República Dominicana -->
+        <h3 class="animado" style="font-size: 28px; font-weight: bold; margin-top: 40px;">
+            <span style="color: #0033A0;">look for </span>our excursions on the map !
+        </h3>
+        <div style="position: relative; width: 100%; height: 400px; margin-top: 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3913.205579122922!2d-69.92538018467589!3d18.479076421157656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eaf92b205f3b075%3A0x6f05f9e963e8bb52!2sSanto%20Domingo%2C%20Rep%C3%BAblica%20Dominicana!5e0!3m2!1ses-419!2sus!4v1672828931801!5m2!1ses-419!2sus" 
+                    width="100%" height="100%" style="border: 0; border-radius: 10px;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <p class="animado" style="font-size: 18px; color: #555; margin-top: 20px;">
+            Click on the map for more information or to see more routes, discover the beauty of the Dominican Republic with us!
+        </p>
+
+   <!-- Botón de reserva -->
+<div style="text-align: center;">
+    <a href="https://wa.me/18092514054?text=Hola%2C%20estoy%20interesado%20en%20reservar%20una%20excursi%C3%B3n%20con%20ustedes.%20%3A" 
+       class="animado"
+       style="display: inline-block; padding: 20px 40px; background-color: #d43f3a; color: white; font-size: 20px; font-weight: bold; border-radius: 5px; text-decoration: none; transition: background-color 0.3s ease; margin-top: 30px;">
+       Book your tour now
+
+    </a>
+</div>
+
+    <!-- Galería de imágenes -->
+    <div class="imagenes-excursiones" style="display: flex; justify-content: center; margin-top: 50px; gap: 20px; flex-wrap: wrap;">
+        <div class="animado" style="width: 280px;">
+            <img src="assets/img/creador-mapas-camping-senderismo-o-plan-fogata_409898-160 (1).avif" alt="Excursión en la montaña" style="width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease;">
+            <p style="margin-top: 10px; font-size: 16px; color: #777;">Adventure in the mountains: guided hikes through breathtaking landscapes.
+                .</p>
+        </div>
+        <div class="animado" style="width: 280px;">
+            <img src="assets/img/pngtree-cartoon-hand-drawn-vector-tool-compass-png-image_2592004.jpg" alt="Excursión en la playa" style="width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease;">
+            <p style="margin-top: 10px; font-size: 16px; color: #777;">Walk on the beach: relax while enjoying the sea and the sun.
+            </p>
+        </div>
+        <div class="animado" style="width: 280px;">
+            <img src="assets/img/man-climbing-mountain.png" alt="Excursión en el bosque" style="width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease;">
+            <p style="margin-top: 10px; font-size: 16px; color: #777;">Forest exploration: connect with nature while learning about local flora and fauna.</p>
+        </div>
+    </div>
+
+    <p style="font-size: 16px; color: #777; margin-top: 40px; text-align: center;">Follow us on our social networks and stay updated on our offers and new routes - the adventure never ends!</p>
+    <div class="social-media" style="margin-top: 20px; text-align: center;">
+        <a href="https://facebook.com" style="margin: 0 10px; font-size: 24px; color: #3b5998; text-decoration: none;">Facebook</a>
+        <a href="https://www.instagram.com/" style="margin: 0 10px; font-size: 24px; color: #e4405f; text-decoration: none;">Instagram</a>
+        <a href="https://twitter.com" style="margin: 0 10px; font-size: 24px; color: #1da1f2; text-decoration: none;">Twitter / X</a>
+    </div>
+</section>
+</body>
+</html>

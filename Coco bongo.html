@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Producto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+         /* Asegura que el contenido ocupe al menos el 100% de la altura de la ventana */
+         body {
+            font-family: 'Mulish', sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: url('paginas/cocobongo2.jpeg'); /* Imagen de fondo */
+            background-size: cover; /* La imagen cubre toda la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* La imagen no se repite */
+        }
+
+        /* El contenedor principal (header + main) debe ocupar todo el espacio disponible */
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 20px;
+            flex-grow: 1; /* Esto asegura que el contenido se expanda para llenar el espacio disponible */
+        }
+
+        /* Estilo del encabezado */
+        header {
+            background-color: #00A8E8;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Botón de regreso */
+        .btn-regresar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5rem;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Estilo de las tarjetas de productos */
+        .producto-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .producto-card img {
+            width: 100%;
+            border-radius: 8px;
+            height: auto;
+        }
+
+        .producto-card h3 {
+            margin: 15px 0;
+        }
+
+        .producto-card p {
+            color: #777;
+            font-size: 1rem;
+        }
+
+        .producto-card .precio {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn-reservar {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #25d366; /* Color de WhatsApp */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-reservar:hover {
+            background-color: #128c7e;
+        }
+
+        .btn-gmail {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #D44638; /* Color de Gmail */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-gmail:hover {
+            background-color: #c1351d;
+        }
+
+        /* Estilo del footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            margin-top: auto; /* Esto asegura que el footer se mantenga abajo */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Botón de regresar -->
+        <button class="btn-regresar" onclick="window.history.back();">←</button>
+        <h1>Product Catalog</h1>
+    </header>
+
+    <main>
+        <div class="producto-card">
+            <img src="paginas/cocobongo1.jpg" alt="Producto 1">
+            <h3>STANDARD</h3>
+            <p>Includes entrance fee and open bar with domestic beverages, package available from Tuesday to Sunday.</p>
+            <div class="precio">$90</div>
+            <a href="https://wa.me/+18092514054?text=¡Me%20interesa%20el%20Producto%201%20STANDARD%20y%20quiero%20reservarlo!  Precio $90" class="btn-reservar" target="_blank">
+                BOOKING WITH WHATSAPP
+            </a>
+            <a href="mailto:harmonyexcursions@outlook.com?subject=Reserva%20Producto%201%20STANDARD&body=Hola,%20me%20interesa%20el%20Producto%201%20STANDARD.%20Por%20favor,%20resérvame." class="btn-gmail">
+                BOOKING WITH GMAIL
+            </a>
+        </div>
+
+        <div class="producto-card">
+            <img src="paginas/cocobongo2.jpeg" alt="Producto 2">
+            <h3>Gold Member</h3>
+            <p>Includes entrance and Open bar in the Gold member area, NOT INCLUDING SEATS, available from Tuesday to Sunday.</p>
+            <div class="precio">$125</div>
+            <a href="https://wa.me/+18092514054?text=¡Me%20interesa%20el%20Producto%202%20Gold%20Member%20y%20quiero%20reservarlo! Precio $125" class="btn-reservar" target="_blank">
+                BOOKING WITH WHATSAPP
+            </a>
+            <a href="mailto:harmonyexcursions@outlook.com?subject=Reserva%20Producto%202%20Gold%20Member&body=Hola,%20me%20interesa%20el%20Producto%202%20Gold%20Member.%20Por%20favor,%20resérvame." class="btn-gmail">
+                BOOKING WITH GMAIL
+            </a>
+        </div>
+
+        <div class="producto-card">
+            <img src="paginas/cocobongo3.webp" alt="Producto 3">
+            <h3>FRONT ROW VIP</h3>
+            <p>Includes entrance to FRONT ROW VIP area, the best view of the shows, preferential seating, Premium drinks, and fast entrance. Tuesday packages available.</p>
+            <div class="precio">$190</div>
+            <a href="https://wa.me/+18092514054?text=¡Me%20interesa%20el%20Producto%203%20FRONT%20ROW%20VIP%20y%20quiero%20reservarlo! Precio $190" class="btn-reservar" target="_blank">
+                BOOKING WITH WHATSAPP
+            </a>
+            <a href="mailto:harmonyexcursions@outlook.com?subject=Reserva%20Producto%203%20FRONT%20ROW%20VIP&body=Hola,%20me%20interesa%20el%20Producto%203%20FRONT%20ROW%20VIP.%20Por%20favor,%20resérvame." class="btn-gmail">
+                BOOKING WITH GMAIL
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Mi Tienda Online. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>

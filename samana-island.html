@@ -1,0 +1,266 @@
+<!-- BUGGY -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Compra</title>
+    <style>
+        /* Estilo general de la página */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('assets/img/samanaisla3.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        /* Estilo para el botón "Regresar" */
+        .btn-regresar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-regresar:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo de la tarjeta del producto */
+        .producto-card {
+            max-width: 400px;
+            background-color: rgba(0, 0, 0, 0.616);
+            margin: 50px auto;
+            padding: 17px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .producto-card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .producto-card h3 {
+            font-size: 24px;
+            color: #fff;
+            margin-top: 13px;
+        }
+
+        .producto-card p {
+            font-size: 16px;
+            color: #fff;
+            line-height: 1.6;
+            margin-top: 25px;
+        }
+
+        .producto-card .precio {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-top: 13px;
+        }
+
+        /* Estilo del formulario */
+        form {
+            margin-top: 17px;
+            margin-bottom: 17px;
+        }
+
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-top: 8px;
+            color: #fdf0f0;
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form input[type="email"] {
+            width: 95%;
+            padding: 8px;
+            margin-top: 4px;
+            border: 1px solid #ffffff;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 13px;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo del enlace de reserva */
+        .btn-reservar {
+            display: inline-block;
+            width: 95%;
+            text-align: center;
+            padding: 10px; /* Aseguramos que el tamaño sea igual al botón de Gmail */
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 13px;
+        }
+
+        /* Colores personalizados para los botones */
+        .btn-whatsapp {
+            background-color: #25D366; /* Color específico para WhatsApp */
+        }
+
+        .btn-gmail {
+            background-color: #D44638; /* Color específico para Gmail */
+        }
+
+        .btn-reservar:hover {
+            background-color: #007bb5;
+        }
+
+        /* Estilo para mostrar el precio final */
+        .precio-final {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-top: 13px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón "Regresar" -->
+    <a href="javascript:history.back()" class="btn-regresar">Go back</a>
+
+    <div class="producto-card">
+        <img src="assets/img/samanaisla2.jpg" alt="1 PAX">
+        <h3>Samana island </h3>
+        <p>
+            Enjoy a thrilling excursion with transport, a professional guide, and all the essentials for an unforgettable day. Begin your journey with a visit to Cayo Levantado, where you can relax on pristine beaches. Then, embark on an exciting safari adventure, discovering the beauty of the local nature. Explore the surroundings on horseback, followed by a visit to the stunning El Limón Waterfall. Along the way, you'll enjoy a delicious lunch and refreshing drinks, offering an immersive experience in the Dominican Republic's natural wonders.</p>
+   
+
+
+        <!-- Formulario de compra -->
+        <form id="form-compra">
+            <!-- Campo de Nombre -->
+            <label for="nombre"><b>Name:</b></label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <!-- Campo de Apellido -->
+            <label for="apellido"><b>Last name:</b></label>
+            <input type="text" id="apellido" name="apellido" required>
+
+            <!-- Campo de Correo Electrónico -->
+            <label for="email"><b>Email:</b></label>
+            <input type="email" id="email" name="email" required>
+
+            <!-- Campo de Hotel -->
+            <label for="hotel"><b>Hotel:</b></label>
+            <input type="text" id="hotel" name="hotel" required>
+
+            <!-- Campo de Cantidad de Niños -->
+            <label for="cantidad_ninos"><b>(Children 6 and 8 years old) Number of children:</b></label>
+            <input type="number" id="cantidad_ninos" name="cantidad_ninos" min="0" value="0" oninput="calcularPrecio()" required>
+            
+            <!-- Campo de Cantidad de Adultos -->
+            <label for="cantidad_adultos"><b>Number of adults:</b></label>
+            <input type="number" id="cantidad_adultos" name="cantidad_adultos" min="0" value="0" oninput="calcularPrecio()" required>
+
+            <button type="button" id="btn-compra" onclick="generarEnlaceWhatsApp()">Booking</button>
+        </form>
+
+        <!-- Mostrar precio total -->
+        <div class="precio-final" id="precio-total">Total Price: $0</div>
+
+        <!-- Botón de reserva con WhatsApp -->
+        <a href="#" class="btn-reservar btn-whatsapp" id="btn-reservar-whatsapp" target="_blank" style="display:none;">
+            BOOKING with WhatsApp
+        </a>
+
+        <!-- Botón de reserva con Gmail -->
+        <a href="#" class="btn-reservar btn-gmail" id="btn-reservar-gmail" target="_blank" style="display:none;">
+            BOOKING with Gmail
+        </a>
+    </div>
+
+    <script>
+        function calcularPrecio() {
+            var cantidadAdultos = document.getElementById("cantidad_adultos").value || 0; // Asegurarse que sea un número
+            var cantidadNinos = document.getElementById("cantidad_ninos").value || 0; // Asegurarse que sea un número
+            var precioPorAdulto = 80; // Precio por adulto
+            var precioPorNino = 40;  // Precio por niño
+
+            // Calcular el precio total
+            var precioTotal = (parseInt(cantidadAdultos) * precioPorAdulto) + (parseInt(cantidadNinos) * precioPorNino);
+            
+            // Actualizar el precio total
+            document.getElementById("precio-total").textContent = "Precio Total: $" + precioTotal;
+        }
+
+        function generarEnlaceWhatsApp() {
+            // Obtener los valores del formulario
+            var nombre = document.getElementById("nombre").value;
+            var apellido = document.getElementById("apellido").value;
+            var email = document.getElementById("email").value;
+            var hotel = document.getElementById("hotel").value;
+            var cantidadNinos = document.getElementById("cantidad_ninos").value;
+            var cantidadAdultos = document.getElementById("cantidad_adultos").value;
+            var precioTotal = document.getElementById("precio-total").textContent.replace('Precio Total: $', '');
+
+            // Crear el mensaje de WhatsApp
+            var mensaje = "Hola, me interesa reservar la Excursion a Samana. Aquí están mis datos:\n";
+            mensaje += "Nombre: " + nombre + " " + apellido + "\n";
+            mensaje += "Correo electrónico: " + email + "\n";
+            mensaje += "Hotel: " + hotel + "\n";
+            mensaje += "Cantidad de adultos: " + cantidadAdultos + "\n";
+            mensaje += "Cantidad de niños: " + cantidadNinos + "\n";
+            mensaje += "Precio total: $" + precioTotal;
+
+            // Codificar el mensaje
+            var mensajeCodificado = encodeURIComponent(mensaje);
+
+            // Generar el enlace de WhatsApp
+            var enlaceWhatsApp = "https://wa.me/+18092514054?text=" + mensajeCodificado;
+
+            // Mostrar el enlace de WhatsApp y ocultar el botón de Gmail
+            var btnWhatsApp = document.getElementById("btn-reservar-whatsapp");
+            btnWhatsApp.setAttribute("href", enlaceWhatsApp);
+            btnWhatsApp.style.display = "inline-block"; // Mostrar el enlace de WhatsApp
+
+            // Crear el enlace para Gmail
+            var enlaceGmail = "mailto:harmonyexcursions@outlook.com?subject=Reserva%20de%20Producto%20Buggy&body=" + mensajeCodificado;
+            
+            // Mostrar el enlace de Gmail
+            var btnGmail = document.getElementById("btn-reservar-gmail");
+            btnGmail.setAttribute("href", enlaceGmail);
+            btnGmail.style.display = "inline-block"; // Mostrar el enlace de Gmail
+        }
+    </script>
+
+</body>
+</html>
+
+
+

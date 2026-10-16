@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Producto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Asegura que el contenido ocupe al menos el 100% de la altura de la ventana */
+        body {
+            font-family: 'Mulish', sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: url('assets/img/Saonadiving2.jpg'); /* Imagen de fondo */
+            background-size: cover; /* La imagen cubre toda la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* La imagen no se repite */
+        }
+
+        /* El contenedor principal (header + main) debe ocupar todo el espacio disponible */
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 20px;
+            flex-grow: 1; /* Esto asegura que el contenido se expanda para llenar el espacio disponible */
+        }
+
+        /* Estilo del encabezado */
+        header {
+            background-color: #00A8E8;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Botón de regreso */
+        .btn-regresar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5rem;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Estilo de las tarjetas de productos */
+        .producto-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .producto-card img {
+            width: 100%;
+            border-radius: 8px;
+            height: auto;
+        }
+
+        .producto-card h3 {
+            margin: 15px 0;
+        }
+
+        .producto-card p {
+            color: #777;
+            font-size: 1rem;
+        }
+
+        .producto-card .precio {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn-reservar {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #25d366; /* Color de WhatsApp */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-reservar:hover {
+            background-color: #128c7e;
+        }
+
+        /* Estilo del footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            margin-top: auto; /* Esto asegura que el footer se mantenga abajo */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Botón de regresar -->
+        <button class="btn-regresar" onclick="window.history.back();">←</button>
+        <h1>Catálogo de Productos</h1>
+    </header>
+
+    <main>
+        <div class="producto-card">
+            <img src="assets/img/Saonadiving1.jpg" alt="Producto 1">
+            <h3>Saona Island and Diving - 1 PAX</h3>
+            <p>Una experiencia única de buceo y excursión en la isla Saona. Perfecta para un aventurero solitario.</p>
+            <div class="precio">$150</div>
+            <a href="https://wa.me/+18092514054?text=¡Me%20interesa%20la%20excursión%20Saona%20Island%20and%20Diving%20de%201%20PAX%20y%20quiero%20reservarlo!" class="btn-reservar" target="_blank">
+                BOOKING NOW
+            </a>
+        </div>
+
+        <div class="producto-card">
+            <img src="assets/img/Saonadiving2.jpg" alt="Producto 2">
+            <h3>Saona Island and Diving - 2 PAX</h3>
+            <p>Ideal para dos personas que buscan disfrutar de un día perfecto en la Isla Saona y una inmersión en aguas cristalinas.</p>
+            <div class="precio">$200</div>
+            <a href="https://wa.me/+18092514054?text=¡Me%20interesa%20la%20excursión%20Saona%20Island%20and%20Diving%20de%202%20PAX%20y%20quiero%20reservarlo!" class="btn-reservar" target="_blank">
+                BOOKING NOW
+            </a>
+        </div>
+
+        <div class="producto-card">
+            <img src="assets/img/Saonadiving3.jpg" alt="Producto 3">
+            <h3>Saona Island and Diving - 10 PAX</h3>
+            <p>Para grupos grandes, esta excursión ofrece una experiencia memorable de buceo y excursión por la Isla Saona.</p>
+            <div class="precio">$120</div>
+            <a href="https://wa.me/+18092514054?text=¡Me%20interesa%20la%20excursión%20Saona%20Island%20and%20Diving%20de%2010%20PAX%20y%20quiero%20reservarlo!" class="btn-reservar" target="_blank">
+                BOOKING NOW
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Harmony Excursions. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
