@@ -38,25 +38,32 @@ const write = (path, html) => {
 const fill = (s) => s.replace('Up to 24 h', `Up to ${site.freeCancelHours} h`).replace('Hasta 24 h', `Hasta ${site.freeCancelHours} h`);
 
 // ---------- imágenes ----------
-const WIDTHS = [480, 960, 1600];
+// Anchos generados. Nunca se agranda una foto: el máximo es su tamaño original (hasta 2400 px).
+const WIDTHS = [480, 800, 1200, 1600, 2400];
+// Calidad JPEG (0–100): la portada y la foto principal de cada tour van casi sin pérdida.
+const Q = { hero: 95, cover: 90, normal: 80 };
 const imgCache = new Map();
 function dims(file) {
   const out = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', file]).toString();
   return { w: +out.match(/pixelWidth: (\d+)/)[1], h: +out.match(/pixelHeight: (\d+)/)[1] };
 }
 // Devuelve { name, w, h, widths } y genera docs/img/name-W.jpg para cada ancho.
-function image(file, name) {
+function image(file, name, quality = Q.normal) {
   if (imgCache.has(name)) return imgCache.get(name);
   const src = join(PHOTOS, file);
   if (!existsSync(src)) throw new Error(`Falta la foto ${file}`);
   const { w, h } = dims(src);
-  const widths = WIDTHS.filter((x) => x < w).concat(w < WIDTHS.at(-1) ? [w] : [WIDTHS.at(-1)]);
-  const uniq = [...new Set(widths)];
+  const max = Math.min(w, WIDTHS.at(-1));
+  const uniq = [...new Set([...WIDTHS.filter((x) => x < max), max])];
   mkdirSync(join(OUT, 'img'), { recursive: true });
   for (const width of uniq) {
     const dest = join(OUT, 'img', `${name}-${width}.jpg`);
     if (existsSync(dest) && statSync(dest).mtimeMs > statSync(src).mtimeMs) continue;
-    execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '50', '--resampleWidth', String(width), src, '--out', dest], { stdio: 'ignore' });
+    // Tamaño original de un JPEG: se copia tal cual, sin volver a comprimir (máxima calidad).
+    if (width === w && /\.jpe?g$/i.test(file)) { copyFileSync(src, dest); continue; }
+    const args = ['-s', 'format', 'jpeg', '-s', 'formatOptions', String(quality)];
+    if (width < w) args.push('--resampleWidth', String(width));
+    execFileSync('sips', [...args, src, '--out', dest], { stdio: 'ignore' });
   }
   const info = { name, w, h, widths: uniq };
   imgCache.set(name, info);
@@ -64,10 +71,10 @@ function image(file, name) {
 }
 function picture(from, info, alt, { sizes = '100vw', eager = false, cls = '' } = {}) {
   const set = info.widths.map((w) => `${rel(from, `img/${info.name}-${w}.jpg`)} ${w}w`).join(', ');
-  const mid = info.widths.find((w) => w >= 960) ?? info.widths.at(-1);
+  const mid = eager ? info.widths.at(-1) : info.widths.find((w) => w >= 1200) ?? info.widths.at(-1);
   return `<img${cls ? ` class="${cls}"` : ''} src="${rel(from, `img/${info.name}-${mid}.jpg`)}" srcset="${set}" sizes="${sizes}" width="${info.w}" height="${info.h}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
 }
-const tourImages = (tour) => tour.photos.map((p, i) => ({ ...image(p.file, `${tour.slug}-${i + 1}`), alt: p.alt }));
+const tourImages = (tour) => tour.photos.map((p, i) => ({ ...image(p.file, `${tour.slug}-${i + 1}`, i === 0 ? Q.cover : Q.normal), alt: p.alt }));
 
 // ---------- precios ----------
 function fromPrice(tour) {
@@ -279,7 +286,7 @@ function homePage(lang) {
   const H = L.home;
   const path = '';
   const from = pageUrl(lang, path);
-  const hero = image('Isla-Catalina2.jpg', 'hero-catalina');
+  const hero = image('Isla-Catalina2.jpg', 'hero-catalina', Q.hero);
   const featured = tours.filter((tr) => tr.featured).slice(0, 5); // 1 grande + 4: llena la cuadrícula
   const catTiles = Object.entries(categories).map(([k, v]) => {
     const list = tours.filter((tr) => tr.cat === k);
@@ -686,11 +693,11 @@ function notFoundPage() {
   // GitHub Pages sirve /404.html para cualquier ruta, así que aquí usamos rutas absolutas.
   const N = T.en.notFound;
   const E = T.es.notFound;
-  const img = image('Isla-Catalina2.jpg', 'hero-catalina');
+  const img = image('Isla-Catalina2.jpg', 'hero-catalina', Q.hero);
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${N.title}</title><meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="/css/site.css"></head>
-<body class="nf"><main class="nf__in" style="--bg:url('/img/${img.name}-960.jpg')"><p class="kicker kicker--light">404</p><h1 class="display">${N.h1}</h1><p class="lead">${N.lead}</p>
+<body class="nf"><main class="nf__in" style="--bg:url('/img/${img.name}-${img.widths.at(-1)}.jpg')"><p class="kicker kicker--light">404</p><h1 class="display">${N.h1}</h1><p class="lead">${N.lead}</p>
 <p class="nf__actions"><a class="btn btn--sand" href="/">${N.cta}</a> <a class="btn btn--ghost-light" href="/es/" lang="es">${E.cta}</a></p></main></body></html>`;
 }
 
@@ -723,7 +730,7 @@ function build() {
   // Imagen para compartir (1200×630) y icono de Apple.
   const og = join(OUT, 'img/og-default.jpg');
   if (!existsSync(og)) {
-    execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '75', '--resampleWidth', '1200', join(PHOTOS, 'Isla-Catalina2.jpg'), '--out', og], { stdio: 'ignore' });
+    execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '90', '--resampleWidth', '1200', join(PHOTOS, 'Isla-Catalina2.jpg'), '--out', og], { stdio: 'ignore' });
     execFileSync('sips', ['-c', '630', '1200', og], { stdio: 'ignore' });
   }
   const touch = join(OUT, 'img/apple-touch-icon.png');

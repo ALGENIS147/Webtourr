@@ -72,7 +72,7 @@ export const tours = [
       { file: 'Saonabarco1.jpg', alt: { en: 'Guests on a boat heading to Saona', es: 'Turistas en lancha rumbo a Saona' } },
       { file: 'mejores-playas-republica-dominicana.webp', alt: { en: 'Turquoise water in the Dominican Republic', es: 'Agua turquesa en República Dominicana' } },
     ],
-    pricing: { type: 'person', adult: 60, child: 30 },
+    pricing: { type: 'person', adult: 55, child: 30 },
   },
   {
     slug: 'saona-private-speedboat',
@@ -199,7 +199,7 @@ export const tours = [
       { file: 'catalina3.jpg', alt: { en: 'Panoramic view of Catalina Island', es: 'Vista panorámica de Isla Catalina' } },
       { file: 'snorkel3.jpg', alt: { en: 'Tropical fish on the coral reef', es: 'Peces tropicales en el arrecife' } },
     ],
-    pricing: { type: 'person', adult: 60, child: 30 },
+    pricing: { type: 'person', adult: 55, child: 30 },
   },
   {
     slug: 'catalina-diving',
@@ -584,7 +584,7 @@ export const tours = [
       { file: 'santo-domingo1.jpg', alt: { en: 'Alcázar de Colón', es: 'Alcázar de Colón' } },
       { file: 'santo-domingo2.jpg', alt: { en: 'Santo Domingo seafront', es: 'Malecón de Santo Domingo' } },
     ],
-    pricing: { type: 'person', adult: 60, child: 30 },
+    pricing: { type: 'person', adult: 55, child: 30 },
   },
   {
     slug: 'higuey-private-city-tour',

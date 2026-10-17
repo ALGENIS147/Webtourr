@@ -18,7 +18,11 @@ Son un **borrador**, no asesoría legal:
 - [ ] Política de privacidad (dice que guardan los mensajes 24 meses).
 - [ ] Preguntas frecuentes (sobre todo "¿Cómo se paga?").
 
-## 3. Precios que en la página vieja eran confusos — `src/data/tours.mjs`
+## 3. Precios — `src/data/tours.mjs`
+Confirmados por el dueño (16-oct-2026), por persona: Saona $55, Catalina snorkel $55, Santo Domingo $55, Samaná $80.
+- [ ] Precio de **niño** en esos cuatro (siguen en $30, $30, $30 y $40).
+
+Pendientes de la página vieja:
 - [ ] **Higüey privado**: $130 / $180 / $220. ¿Es precio por grupo o por persona? Puse **por grupo**.
 - [ ] **Saona + buceo**: 1 persona $150, 2 personas $200, grupo $120. Puse el grupo como **$120 por persona (3–10)**.
 - [ ] **Los Haitises**: la página vieja cobraba $320 la primera pareja y **$40** cada pareja extra. Lo dejé igual; parece muy barato.
