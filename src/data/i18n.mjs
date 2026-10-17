@@ -3,6 +3,18 @@ export const t = {
   en: {
     langName: 'English',
     skip: 'Skip to content',
+    favs: {
+      title: 'My favourites',
+      add: (t) => `Save ${t} to favourites`,
+      remove: (t) => `Remove ${t} from favourites`,
+      removeShort: 'Remove',
+      empty: 'Tap the ♥ on any tour to save it here. Then send your list to us in one tap.',
+      send: 'Send my list on WhatsApp',
+      clear: 'Clear list',
+      msgIntro: 'Hello Harmony Excursions! These are the tours I like:',
+      msgOutro: 'Can you help me plan my days?',
+      saved: 'Saved to favourites',
+    },
     nav: { tours: 'Tours', map: 'Destinations', about: 'About', faq: 'FAQ', contact: 'Contact' },
     menu: 'Menu',
     close: 'Close',
@@ -25,6 +37,7 @@ export const t = {
       h1: 'The Caribbean, <em>the Dominican way.</em>',
       lead: 'Merengue on the boat, fresh coconut on the sand and guides who grew up on these beaches. Real Dominican days — picked up at your hotel, priced in dollars with nothing hidden.',
       localTime: 'Now in Punta Cana',
+      weather: { 0: 'Clear', 1: 'Mostly sunny', 2: 'Partly cloudy', 3: 'Cloudy', 45: 'Fog', 51: 'Drizzle', 61: 'Rain', 80: 'Showers', 95: 'Storm' },
       finder: {
         title: 'Plan your day',
         tour: 'Experience',
@@ -241,6 +254,18 @@ export const t = {
   es: {
     langName: 'Español',
     skip: 'Saltar al contenido',
+    favs: {
+      title: 'Mis favoritos',
+      add: (t) => `Guardar ${t} en favoritos`,
+      remove: (t) => `Quitar ${t} de favoritos`,
+      removeShort: 'Quitar',
+      empty: 'Toca el ♥ en cualquier tour para guardarlo aquí. Luego nos envías tu lista con un toque.',
+      send: 'Enviar mi lista por WhatsApp',
+      clear: 'Vaciar lista',
+      msgIntro: '¡Hola Harmony Excursions! Estos son los tours que me gustan:',
+      msgOutro: '¿Me ayudan a planear mis días?',
+      saved: 'Guardado en favoritos',
+    },
     nav: { tours: 'Tours', map: 'Destinos', about: 'Nosotros', faq: 'Preguntas', contact: 'Contacto' },
     menu: 'Menú',
     close: 'Cerrar',
@@ -263,6 +288,7 @@ export const t = {
       h1: 'El Caribe, <em>a lo dominicano.</em>',
       lead: 'Merengue en la lancha, coco fresco en la arena y guías que se criaron en estas playas. Días dominicanos de verdad, con recogida en tu hotel y precios en dólares sin sorpresas.',
       localTime: 'Ahora en Punta Cana',
+      weather: { 0: 'Despejado', 1: 'Soleado', 2: 'Parcialmente nublado', 3: 'Nublado', 45: 'Neblina', 51: 'Llovizna', 61: 'Lluvia', 80: 'Aguaceros', 95: 'Tormenta' },
       finder: {
         title: 'Planea tu día',
         tour: 'Experiencia',

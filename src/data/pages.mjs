@@ -67,12 +67,12 @@ export const legal = {
   },
   privacy: {
     en: ['Privacy policy', [
-      ['What we collect', 'This website does not use cookies, analytics or forms that store data. When you send us a booking request, your message (name, hotel, dates, number of guests, contact) goes directly to our WhatsApp or email.'],
+      ['What we collect', 'This website does not use cookies, analytics or forms that store data on our side. When you send us a booking request, your message (name, hotel, dates, number of guests, contact) goes directly to our WhatsApp or email.'],
       ['Why we use it', 'Only to answer you, organise your experience and arrange your pickup.'],
       ['Who we share it with', 'Only with the suppliers needed to run your experience (for example, transport or boat operators). We never sell your data.'],
       ['How long we keep it', 'We keep booking messages for up to 24 months for accounting and customer service, then delete them.'],
       ['Your rights', `You can ask us to see, correct or delete your data at any time by writing to ${site.email}.`],
-      ['Third parties', 'WhatsApp, email providers and Google Fonts have their own privacy policies.'],
+      ['Third parties', 'WhatsApp, email providers, Google Fonts and Open-Meteo (the live weather on our home page) have their own privacy policies. Favourites you save stay only in your own browser.'],
     ]],
     es: ['Política de privacidad', [
       ['Qué datos recogemos', 'Esta web no usa cookies, analítica ni formularios que guarden datos. Cuando nos envías una solicitud, tu mensaje (nombre, hotel, fechas, personas, contacto) llega directo a nuestro WhatsApp o correo.'],
@@ -80,7 +80,7 @@ export const legal = {
       ['Con quién los compartimos', 'Solo con los proveedores necesarios para tu experiencia (por ejemplo, transporte u operadores de botes). Nunca vendemos tus datos.'],
       ['Cuánto tiempo los guardamos', 'Guardamos los mensajes de reserva hasta 24 meses por contabilidad y atención al cliente, y luego los borramos.'],
       ['Tus derechos', `Puedes pedirnos ver, corregir o borrar tus datos cuando quieras escribiendo a ${site.email}.`],
-      ['Terceros', 'WhatsApp, los proveedores de correo y Google Fonts tienen sus propias políticas de privacidad.'],
+      ['Terceros', 'WhatsApp, los proveedores de correo, Google Fonts y Open-Meteo (el clima en vivo de la portada) tienen sus propias políticas de privacidad. Los favoritos que guardas se quedan solo en tu navegador.'],
     ]],
   },
 };

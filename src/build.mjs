@@ -1,7 +1,7 @@
 // Generador del sitio: node src/build.mjs
 // Lee src/data/*, escribe el sitio estático completo en docs/ (lo que publica GitHub Pages).
 // Sin dependencias: solo Node y `sips` de macOS para optimizar las fotos.
-import { mkdirSync, writeFileSync, copyFileSync, existsSync, rmSync, readdirSync, statSync } from 'node:fs';
+import { mkdirSync, writeFileSync, copyFileSync, existsSync, rmSync, readdirSync, statSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -66,14 +66,20 @@ function image(file, name, quality = Q.normal) {
     if (width < w) args.push('--resampleWidth', String(width));
     execFileSync('sips', [...args, src, '--out', dest], { stdio: 'ignore' });
   }
-  const info = { name, w, h, widths: uniq };
+  // Vista previa diminuta (24 px) embebida en la página: se ve difuminada mientras carga la foto real.
+  const tiny = join(OUT, 'img', `${name}-lqip.jpg`);
+  if (!existsSync(tiny) || statSync(tiny).mtimeMs < statSync(src).mtimeMs) {
+    execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '40', '--resampleWidth', '24', src, '--out', tiny], { stdio: 'ignore' });
+  }
+  const lqip = `data:image/jpeg;base64,${readFileSync(tiny).toString('base64')}`;
+  const info = { name, w, h, widths: uniq, lqip };
   imgCache.set(name, info);
   return info;
 }
-function picture(from, info, alt, { sizes = '100vw', eager = false, cls = '' } = {}) {
+function picture(from, info, alt, { sizes = '100vw', eager = false, cls = '', vt = '' } = {}) {
   const set = info.widths.map((w) => `${rel(from, `img/${info.name}-${w}.jpg`)} ${w}w`).join(', ');
   const mid = eager ? info.widths.at(-1) : info.widths.find((w) => w >= 1200) ?? info.widths.at(-1);
-  return `<img${cls ? ` class="${cls}"` : ''} src="${rel(from, `img/${info.name}-${mid}.jpg`)}" srcset="${set}" sizes="${sizes}" width="${info.w}" height="${info.h}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
+  return `<img class="lq${cls ? ` ${cls}` : ''}" src="${rel(from, `img/${info.name}-${mid}.jpg`)}" srcset="${set}" sizes="${sizes}" width="${info.w}" height="${info.h}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" style="background-image:url(${info.lqip})${vt ? `;view-transition-name:${vt}` : ''}">`;
 }
 const tourImages = (tour) => tour.photos.map((p, i) => ({ ...image(p.file, `${tour.slug}-${i + 1}`, i === 0 ? Q.cover : Q.normal), alt: p.alt }));
 
@@ -176,6 +182,7 @@ function header({ lang, path, from, current }) {
         <a class="btn btn--wa" href="${waLink(lang === 'en' ? 'Hello! I would like information about your excursions.' : '¡Hola! Quiero información sobre sus excursiones.')}" target="_blank" rel="noopener">${icon('whatsapp')}<span>${L.bookWhatsApp}</span></a>
       </div>
     </nav>
+    <button class="fav-open" type="button" data-fav-open aria-controls="favs" aria-expanded="false" aria-label="${L.favs.title}" hidden>${icon('heart')}<span class="fav-open__n" data-fav-count>0</span></button>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" data-menu>
       <span class="menu-btn__bars" aria-hidden="true"></span><span class="sr-only">${L.menu}</span>
     </button>
@@ -223,6 +230,18 @@ function footer({ lang, from }) {
     <p>${F.prices}</p>
   </div>
 </footer>
+<aside class="favs" id="favs" role="dialog" aria-modal="true" aria-labelledby="favs-title" data-favs data-root="${rel(from, 'index.html').replace(/index\.html$/, '')}" data-lang="${lang}" data-wa="${site.whatsapp}" data-saved="${esc(L.favs.saved)}" hidden>
+  <div class="favs__panel">
+    <header class="favs__head"><h2 class="favs__title" id="favs-title">${icon('heart')}${L.favs.title}</h2><button class="favs__close" type="button" data-favs-close aria-label="${L.close}">${icon('x')}</button></header>
+    <ul class="favs__list" data-favs-list></ul>
+    <p class="favs__empty" data-favs-empty>${L.favs.empty}</p>
+    <footer class="favs__foot" data-favs-foot>
+      <button class="btn btn--wa btn--block" type="button" data-favs-send>${icon('whatsapp')}${L.favs.send}</button>
+      <button class="favs__clear" type="button" data-favs-clear>${L.favs.clear}</button>
+    </footer>
+  </div>
+</aside>
+<script type="application/json" data-favs-i18n>${JSON.stringify({ intro: L.favs.msgIntro, outro: L.favs.msgOutro, remove: L.favs.removeShort }).replace(/</g, '\\u003c')}</script>
 <div class="bot" data-bot data-wa="${site.whatsapp}" data-root="${rel(from, 'index.html').replace(/index\.html$/, '')}" data-lang="${lang}">
   <button class="bot__launcher" type="button" aria-expanded="false" aria-controls="bot-panel" data-bot-toggle>
     <span class="bot__avatar" aria-hidden="true"></span><span class="bot__launch-txt">${bot[lang].open}</span>
@@ -266,7 +285,7 @@ function card(tour, lang, from, { big = false } = {}) {
   return `
 <article class="card${big ? ' card--big' : ''}" data-reveal data-cat="${tour.cat}" data-price="${f.value}" data-search="${esc(`${tour.title.en} ${tour.title.es} ${tour.tagline[lang]} ${places[tour.place].name}`.toLowerCase())}">
   <a class="card__link" href="${href}">
-    <div class="card__media">${picture(from, img, img.alt[lang], { sizes: big ? '(min-width: 900px) 50vw, 100vw' : '(min-width: 1100px) 33vw, (min-width: 640px) 50vw, 100vw' })}
+    <div class="card__media">${picture(from, img, img.alt[lang], { vt: `t-${tour.slug}`, sizes: big ? '(min-width: 900px) 50vw, 100vw' : '(min-width: 1100px) 33vw, (min-width: 640px) 50vw, 100vw' })}
       <span class="chip chip--glass">${categories[tour.cat][lang]}</span>
     </div>
     <div class="card__body">
@@ -276,7 +295,12 @@ function card(tour, lang, from, { big = false } = {}) {
       <div class="card__foot">${priceTag(tour, lang)}<span class="card__go" aria-hidden="true">${icon('arrow')}</span></div>
     </div>
   </a>
+  ${favButton(tour, lang)}
 </article>`;
+}
+function favButton(tour, lang, cls = '') {
+  const F = T[lang].favs;
+  return `<button class="fav${cls}" type="button" data-fav="${tour.slug}" aria-pressed="false" aria-label="${esc(F.add(tour.title[lang]))}" data-label-on="${esc(F.remove(tour.title[lang]))}" data-label-off="${esc(F.add(tour.title[lang]))}">${icon('heart')}</button>`;
 }
 
 // ---------- mapa ----------
@@ -358,7 +382,7 @@ function homePage(lang) {
       <h1 class="display">${H.h1}</h1>
       <p class="hero__lead">${H.lead}</p>
       <a class="ta-badge" href="${site.tripadvisor.url}" target="_blank" rel="noopener">${ratingDots(site.tripadvisor.rating)}<span>${H.reviewsBadge(fmtRating(site.tripadvisor.rating, lang), site.tripadvisor.count)}</span></a>
-      <p class="localtime" data-clock data-lang="${lang === 'es' ? 'es-DO' : 'en-US'}" hidden>${icon('sun')}<span>${H.localTime}</span><strong data-clock-time></strong></p>
+      <p class="localtime" data-clock data-lang="${lang === 'es' ? 'es-DO' : 'en-US'}" hidden>${icon('sun')}<span>${H.localTime}</span><strong data-clock-time></strong><span class="localtime__wx" data-wx data-labels="${esc(JSON.stringify(H.weather))}" data-lat="${places['punta-cana'].lat}" data-lon="${places['punta-cana'].lon}"></span></p>
     </div>
     <form class="finder" action="${rel(from, pageUrl(lang, 'tours/'))}" data-finder data-base="${rel(from, pageUrl(lang, 'tours/'))}">
       <p class="finder__title">${H.finder.title}</p>
@@ -634,11 +658,12 @@ function tourPage(tour, lang) {
   ];
   const gallery = `
 <div class="gallery gallery--${Math.min(imgs.length, 4)}" data-gallery>
-  ${imgs.slice(0, 4).map((im, i) => `<button type="button" class="gallery__item" data-index="${i}" aria-label="${R.gallery} — ${R.photo(i + 1, imgs.length)}">${picture(from, im, im.alt[lang], { eager: i === 0, sizes: i === 0 ? '(min-width: 900px) 60vw, 100vw' : '(min-width: 900px) 20vw, 33vw' })}</button>`).join('')}
+  ${imgs.slice(0, 4).map((im, i) => `<button type="button" class="gallery__item" data-index="${i}" aria-label="${R.gallery} — ${R.photo(i + 1, imgs.length)}">${picture(from, im, im.alt[lang], { eager: i === 0, vt: i === 0 ? `t-${tour.slug}` : '', sizes: i === 0 ? '(min-width: 900px) 60vw, 100vw' : '(min-width: 900px) 20vw, 33vw' })}</button>`).join('')}
   <template data-gallery-src>${JSON.stringify(imgs.map((im) => ({ src: rel(from, `img/${im.name}-${im.widths.at(-1)}.jpg`), alt: im.alt[lang] })))}</template>
 </div>`;
   const list = (items, cls) => `<ul class="${cls}">${items.map((x) => `<li>${icon(cls === 'ticks' ? 'check' : cls === 'crosses' ? 'x' : 'star')}<span>${esc(x)}</span></li>`).join('')}</ul>`;
   const main = `
+<div class="progress" aria-hidden="true"></div>
 <div class="wrap tour">
   <nav class="crumbs" aria-label="Breadcrumb"><ol>
     <li><a href="${rel(from, langPrefix(lang) || './')}">${lang === 'en' ? 'Home' : 'Inicio'}</a></li>
@@ -646,7 +671,7 @@ function tourPage(tour, lang) {
     <li aria-current="page">${esc(tour.title[lang])}</li></ol></nav>
   <header class="tour__head">
     <p class="kicker">${categories[tour.cat][lang]}</p>
-    <h1 class="display display--md">${esc(tour.title[lang])}</h1>
+    <div class="tour__title"><h1 class="display display--md">${esc(tour.title[lang])}</h1>${favButton(tour, lang, ' fav--lg')}</div>
     <p class="tour__meta">
       <span>${icon('pin')}${places[tour.place].name}</span>
       <span>${icon('clock')}${tour.duration[lang]}</span>
@@ -895,7 +920,7 @@ function build() {
 
   // Borra imágenes huérfanas de builds anteriores.
   const used = new Set(['og-default.jpg', 'apple-touch-icon.png', 'icon-512.png', 'domi.jpg']);
-  for (const info of imgCache.values()) for (const w of info.widths) used.add(`${info.name}-${w}.jpg`);
+  for (const info of imgCache.values()) { used.add(`${info.name}-lqip.jpg`); for (const w of info.widths) used.add(`${info.name}-${w}.jpg`); }
   for (const f of readdirSync(join(OUT, 'img'))) if (!used.has(f)) rmSync(join(OUT, 'img', f));
 
   const pages = LANGS.length * (5 + tours.length + Object.keys(legal).length) + 1;

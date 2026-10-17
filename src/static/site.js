@@ -49,6 +49,151 @@
     setInterval(tick, 30000);
   }
 
+  // ---------- clima en vivo (Open-Meteo: gratis y sin clave) ----------
+  const wx = $('[data-wx]');
+  if (wx) {
+    const labels = JSON.parse(wx.dataset.labels);
+    const icon = (c) => (c <= 1 ? '☀️' : c <= 2 ? '⛅' : c <= 3 ? '☁️' : c < 50 ? '🌫️' : c < 80 ? '🌧️' : c < 95 ? '🌦️' : '⛈️');
+    const label = (c) => labels[[95, 80, 61, 51, 45, 3, 2, 1, 0].find((k) => c >= k)];
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${wx.dataset.lat}&longitude=${wx.dataset.lon}&current=temperature_2m,weather_code&timezone=America%2FSanto_Domingo`)
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => {
+        const c = d.current.weather_code;
+        const t = Math.round(d.current.temperature_2m);
+        const f = Math.round(t * 9 / 5 + 32);
+        wx.textContent = `${icon(c)} ${t}°C / ${f}°F`;
+        wx.title = label(c);
+      })
+      .catch(() => {}); // sin clima no pasa nada: el reloj sigue funcionando
+  }
+
+  // ---------- aviso flotante ----------
+  const toast = (msg) => {
+    const t = document.createElement('div');
+    t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2300);
+  };
+
+  // ---------- favoritos (se guardan solo en el navegador del cliente) ----------
+  const favsEl = $('[data-favs]');
+  if (favsEl) {
+    const KEY = 'hx-favs';
+    const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } };
+    const save = (v) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch { /* modo privado */ } };
+    const I = JSON.parse($('[data-favs-i18n]').textContent);
+    const openBtn = $('[data-fav-open]');
+    const countEl = $('[data-fav-count]');
+    const list = $('[data-favs-list]');
+    const base = favsEl.dataset.root;
+    const lang = favsEl.dataset.lang;
+    let tours = null; // datos de los tours: los mismos que usa Domi
+    const loadTours = () => (tours ? Promise.resolve(tours) : new Promise((ok) => {
+      if (window.HX_BOT) { tours = window.HX_BOT.tours; return ok(tours); }
+      const sc = document.createElement('script');
+      sc.src = `${base}js/bot-${lang}.js`;
+      sc.onload = () => { tours = window.HX_BOT.tours; ok(tours); };
+      sc.onerror = () => ok([]);
+      document.head.appendChild(sc);
+    }));
+    const sync = () => {
+      const favs = read();
+      $$('[data-fav]').forEach((b) => {
+        const on = favs.includes(b.dataset.fav);
+        b.setAttribute('aria-pressed', String(on));
+        b.setAttribute('aria-label', on ? b.dataset.labelOn : b.dataset.labelOff);
+      });
+      countEl.textContent = favs.length;
+      openBtn.hidden = favs.length === 0;
+    };
+    const render = async () => {
+      const favs = read();
+      const all = await loadTours();
+      const items = favs.map((s) => all.find((t) => t.slug === s)).filter(Boolean);
+      list.innerHTML = items.map((t) => `<li class="favs__item"><img src="${base}${t.img}" alt="" width="84" height="64"><a href="${base}${t.url}"><b>${t.title}</b><small>${t.price}</small></a><button type="button" data-unfav="${t.slug}">${I.remove}</button></li>`).join('');
+      $('[data-favs-empty]').hidden = items.length > 0;
+      $('[data-favs-foot]').hidden = items.length === 0;
+    };
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-fav]');
+      if (!b) return;
+      e.preventDefault();
+      const favs = read();
+      const i = favs.indexOf(b.dataset.fav);
+      if (i >= 0) favs.splice(i, 1); else favs.push(b.dataset.fav);
+      save(favs);
+      sync();
+      if (i < 0) {
+        b.classList.remove('is-pop'); void b.offsetWidth; b.classList.add('is-pop');
+        openBtn.classList.remove('is-bump'); void openBtn.offsetWidth; openBtn.classList.add('is-bump');
+        toast(favsEl.dataset.saved || '♥');
+      }
+    });
+    const openFavs = () => { render(); favsEl.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; $('[data-favs-close]').focus(); };
+    const closeFavs = () => { favsEl.hidden = true; openBtn.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; openBtn.focus(); };
+    openBtn.addEventListener('click', openFavs);
+    $('[data-favs-close]').addEventListener('click', closeFavs);
+    favsEl.addEventListener('click', (e) => {
+      if (e.target === favsEl) closeFavs();
+      const un = e.target.closest('[data-unfav]');
+      if (un) { save(read().filter((x) => x !== un.dataset.unfav)); sync(); render(); }
+    });
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && !favsEl.hidden) closeFavs(); });
+    $('[data-favs-clear]').addEventListener('click', () => { save([]); sync(); render(); });
+    $('[data-favs-send]').addEventListener('click', async () => {
+      const all = await loadTours();
+      const lines = read().map((s) => all.find((t) => t.slug === s)).filter(Boolean).map((t) => `• ${t.title} (${t.price})`);
+      const text = [I.intro, '', ...lines, '', I.outro].join('\n');
+      window.open(`https://wa.me/${favsEl.dataset.wa}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    });
+    addEventListener('storage', (e) => { if (e.key === KEY) sync(); }); // otra pestaña
+    sync();
+  }
+
+  // ---------- tarjetas 3D (solo con mouse y sin "reducir movimiento") ----------
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.addEventListener('pointermove', (e) => {
+      const card = e.target.closest('.card');
+      if (!card) return;
+      const link = $('.card__link', card);
+      const r = link.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      card.classList.add('is-tilting');
+      link.style.transform = `translateY(-4px) rotateX(${(0.5 - y) * 6}deg) rotateY(${(x - 0.5) * 6}deg)`;
+      link.style.setProperty('--gx', `${x * 100}%`);
+      link.style.setProperty('--gy', `${y * 100}%`);
+    });
+    document.addEventListener('pointerout', (e) => {
+      const card = e.target.closest('.card');
+      if (!card || card.contains(e.relatedTarget)) return;
+      card.classList.remove('is-tilting');
+      $('.card__link', card).style.transform = '';
+    });
+  }
+
+  // ---------- la calificación cuenta desde cero al aparecer ----------
+  const num = $('.score__num');
+  if (num && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const node = num.firstChild;
+    const final = node.textContent;
+    const value = parseFloat(final.replace(',', '.'));
+    const sep = final.includes(',') ? ',' : '.';
+    const io2 = new IntersectionObserver(([en]) => {
+      if (!en.isIntersecting) return;
+      io2.disconnect();
+      const t0 = performance.now();
+      const step = (t) => {
+        const k = Math.min(1, (t - t0) / 1200);
+        const eased = 1 - Math.pow(1 - k, 3);
+        node.textContent = (value * eased).toFixed(1).replace('.', sep);
+        if (k < 1) requestAnimationFrame(step); else node.textContent = final;
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.5 });
+    io2.observe(num);
+  }
+
   // ---------- fechas: mínimo mañana ----------
   const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
   $$('[data-mindate]').forEach((i) => { i.min = isoDate(tomorrow); });
