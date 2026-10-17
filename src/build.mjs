@@ -104,6 +104,13 @@ const logo = (from, lang) => `
 // Bandera dominicana (versión sin escudo) para detalles de marca.
 const flag = (cls = '') => `<svg class="flag ${cls}" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect width="13" height="8" fill="#002d62"/><rect x="17" width="13" height="8" fill="#ce1126"/><rect y="12" width="13" height="8" fill="#ce1126"/><rect x="17" y="12" width="13" height="8" fill="#002d62"/></svg>`;
 
+
+// Calificación visual: 5 círculos rellenos según la nota (4.8 → 4 llenos y uno al 80 %).
+function ratingDots(r) {
+  return `<span class="dots" aria-hidden="true">${[0, 1, 2, 3, 4].map((i) => `<i style="--f:${Math.round(Math.max(0, Math.min(1, r - i)) * 100)}%"></i>`).join('')}</span>`;
+}
+const fmtRating = (r, lang) => (lang === 'es' ? String(r).replace('.', ',') : String(r));
+
 function waLink(text) {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 }
@@ -218,11 +225,11 @@ function footer({ lang, from }) {
 </footer>
 <div class="bot" data-bot data-wa="${site.whatsapp}" data-root="${rel(from, 'index.html').replace(/index\.html$/, '')}" data-lang="${lang}">
   <button class="bot__launcher" type="button" aria-expanded="false" aria-controls="bot-panel" data-bot-toggle>
-    <span class="bot__avatar" aria-hidden="true">🥥</span><span class="bot__launch-txt">${bot[lang].open}</span>
+    <span class="bot__avatar" aria-hidden="true"></span><span class="bot__launch-txt">${bot[lang].open}</span>
   </button>
   <section class="bot__panel" id="bot-panel" role="dialog" aria-modal="false" aria-labelledby="bot-title" hidden>
     <header class="bot__head">
-      <span class="bot__avatar bot__avatar--lg" aria-hidden="true">🥥</span>
+      <span class="bot__avatar bot__avatar--lg" aria-hidden="true"></span>
       <div><h2 class="bot__title" id="bot-title">${bot[lang].name}</h2><p class="bot__role"><span class="bot__dot" aria-hidden="true"></span>${bot[lang].role}</p></div>
       <button class="bot__icon" type="button" data-bot-restart aria-label="${bot[lang].restart}" title="${bot[lang].restart}">${icon('refresh')}</button>
       <button class="bot__icon" type="button" data-bot-close aria-label="${bot[lang].close}">${icon('x')}</button>
@@ -350,6 +357,7 @@ function homePage(lang) {
       <p class="eyebrow">${flag()}${H.eyebrow}</p>
       <h1 class="display">${H.h1}</h1>
       <p class="hero__lead">${H.lead}</p>
+      <a class="ta-badge" href="${site.tripadvisor.url}" target="_blank" rel="noopener">${ratingDots(site.tripadvisor.rating)}<span>${H.reviewsBadge(fmtRating(site.tripadvisor.rating, lang), site.tripadvisor.count)}</span></a>
       <p class="localtime" data-clock data-lang="${lang === 'es' ? 'es-DO' : 'en-US'}" hidden>${icon('sun')}<span>${H.localTime}</span><strong data-clock-time></strong></p>
     </div>
     <form class="finder" action="${rel(from, pageUrl(lang, 'tours/'))}" data-finder data-base="${rel(from, pageUrl(lang, 'tours/'))}">
@@ -428,6 +436,28 @@ ${mapSection(lang, from)}
     <h2 class="h2" id="groups-title">${H.groupsTitle}</h2>
     <p class="lead">${H.groupsLead}</p>
     <a class="btn btn--sand" href="${rel(from, pageUrl(lang, 'tours/'))}?cat=private">${H.groupsCta}${icon('arrow')}</a>
+  </div>
+</section>
+
+<section class="section reviews" aria-labelledby="reviews-title">
+  <div class="wrap reviews__grid">
+    <div data-reveal>
+      <p class="kicker">${H.reviewsKicker}</p>
+      <h2 class="h2" id="reviews-title">${H.reviewsTitle}</h2>
+      <p class="lead">${H.reviewsLead(site.tripadvisor.count)}</p>
+      <div class="reviews__actions">
+        <a class="btn btn--coral" href="${site.tripadvisor.url}" target="_blank" rel="noopener">${H.reviewsRead}${icon('arrow')}</a>
+        <a class="link-arrow" href="${site.tripadvisor.url}" target="_blank" rel="noopener">${H.reviewsWrite}${icon('arrow')}</a>
+      </div>
+    </div>
+    <a class="score" href="${site.tripadvisor.url}" target="_blank" rel="noopener" data-reveal>
+      <span class="score__brand">${icon('tripadvisor')}TripAdvisor</span>
+      <span class="score__num">${fmtRating(site.tripadvisor.rating, lang)}<small>${H.reviewsOutOf}</small></span>
+      ${ratingDots(site.tripadvisor.rating)}
+      <span class="score__count">${H.reviewsCount(site.tripadvisor.count)}</span>
+      <span class="score__rank">${site.tripadvisor.rank[lang]}</span>
+    </a>
+    ${site.tripadvisor.widget ? `<div class="reviews__widget">${site.tripadvisor.widget}</div>` : ''}
   </div>
 </section>
 
@@ -560,6 +590,7 @@ function bookingWidget(tour, lang) {
     <button class="btn btn--wa btn--block" type="submit" data-via="wa">${icon('whatsapp')}${B.viaWhatsApp}</button>
     <button class="btn btn--ghost btn--block" type="submit" data-via="mail">${icon('mail')}${B.viaEmail}</button>
     <p class="book__fine">${icon('shield')}${B.noPayment}</p>
+    <a class="book__ta" href="${site.tripadvisor.url}" target="_blank" rel="noopener">${ratingDots(site.tripadvisor.rating)}<span>${T[lang].home.reviewsBadge(fmtRating(site.tripadvisor.rating, lang), site.tripadvisor.count)}</span></a>
     <script type="application/json" data-booking-config>${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
   </form>
 </aside>`;
@@ -761,7 +792,7 @@ function sitemap() {
 }
 
 
-// ---------- asistente virtual (Coco) ----------
+// ---------- asistente virtual (Domi) ----------
 // Convierte un objeto a código JS conservando las funciones (las plantillas de texto del bot).
 function toJs(v) {
   if (typeof v === 'function') return v.toString();
@@ -791,6 +822,7 @@ function botScript(lang) {
     aliases,
     intents,
     site: { phone: site.phone, email: site.email, whatsapp: site.whatsapp, hours: site.hours[lang], zones: site.pickupZones[lang] },
+    reviews: { url: site.tripadvisor.url, rating: fmtRating(site.tripadvisor.rating, lang), count: site.tripadvisor.count, rank: site.tripadvisor.rank[lang] },
     faq: { pickup: F[0][1], payment: F[1][1], cancel: F[2][1], kids: F[4][1], bring: F[5][1], rain: F[6][1], groups: F[7][1] },
     cats: Object.fromEntries(Object.entries(categories).map(([k, v]) => [k, v[lang]])),
     tours: tours.map((tr) => {
@@ -849,7 +881,7 @@ function build() {
   }
 
   // Estáticos
-  for (const [src, dest] of [['src/static/site.css', 'css/site.css'], ['src/static/site.js', 'js/site.js'], ['src/static/bot.js', 'js/bot.js'], ['src/static/favicon.svg', 'favicon.svg'], ['src/static/icon-512.png', 'img/icon-512.png'], ['CNAME', 'CNAME']]) {
+  for (const [src, dest] of [['src/static/site.css', 'css/site.css'], ['src/static/site.js', 'js/site.js'], ['src/static/bot.js', 'js/bot.js'], ['src/static/domi.jpg', 'img/domi.jpg'], ['src/static/favicon.svg', 'favicon.svg'], ['src/static/icon-512.png', 'img/icon-512.png'], ['CNAME', 'CNAME']]) {
     mkdirSync(dirname(join(OUT, dest)), { recursive: true });
     copyFileSync(join(ROOT, src), join(OUT, dest));
   }
@@ -862,7 +894,7 @@ function build() {
   }, null, 2));
 
   // Borra imágenes huérfanas de builds anteriores.
-  const used = new Set(['og-default.jpg', 'apple-touch-icon.png', 'icon-512.png']);
+  const used = new Set(['og-default.jpg', 'apple-touch-icon.png', 'icon-512.png', 'domi.jpg']);
   for (const info of imgCache.values()) for (const w of info.widths) used.add(`${info.name}-${w}.jpg`);
   for (const f of readdirSync(join(OUT, 'img'))) if (!used.has(f)) rmSync(join(OUT, 'img', f));
 

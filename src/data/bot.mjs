@@ -1,4 +1,4 @@
-// Asistente virtual "Coco". Funciona 100 % en el navegador, sin IA de pago ni servidor:
+// Asistente virtual "Domi". Funciona 100 % en el navegador, sin IA de pago ni servidor:
 // entiende palabras clave, responde con los datos reales de los tours y, si no sabe, pasa a WhatsApp.
 // Las palabras se escriben sin tildes y en minúscula (el bot normaliza lo que escribe el cliente).
 
@@ -51,20 +51,21 @@ export const intents = {
   cat_adventure: ['aventura', 'adrenalina', 'extremo', 'adventure', 'adrenaline', 'extreme'],
   cat_culture: ['cultura', 'historia', 'ciudad', 'museo', 'culture', 'history', 'city', 'museum'],
   cat_night: ['noche', 'fiesta', 'rumba', 'discoteca', 'bailar', 'night', 'party', 'nightlife', 'dance'],
+  reviews: ['resena', 'resenas', 'opinion', 'opiniones', 'comentarios', 'calificacion', 'estrellas', 'confiable', 'confiables', 'seguro que son', 'estafa', 'tripadvisor', 'review', 'reviews', 'rating', 'ratings', 'trust', 'trustworthy', 'legit', 'scam'],
   slang: ['que lo que', 'klk', 'ta to', 'vacilon', 'jevi', 'un chin', 'pana', 'tiguere', 'vaina'],
 };
 
 export const bot = {
   en: {
-    name: 'Coco',
+    name: 'Domi',
     role: 'Virtual assistant · online',
-    open: 'Questions? Ask Coco',
+    open: 'Questions? Ask Domi',
     close: 'Close chat',
     placeholder: 'Type your question…',
     send: 'Send',
     restart: 'Start over',
-    disclaimer: 'Coco is an automatic assistant. To confirm a booking, a person from our team will reply on WhatsApp.',
-    hello: '¡Hola! I’m Coco 🥥, the Harmony Excursions assistant. Ask me about prices, what’s included, pickup or which tour is best for you.',
+    disclaimer: 'Domi is an automatic assistant. To confirm a booking, a person from our team will reply on WhatsApp.',
+    hello: '¡Hola! I’m Domi 🤖🇩🇴, the Harmony Excursions assistant. Ask me about prices, what’s included, pickup or which tour is best for you.',
     helloBack: 'Welcome back! What else would you like to know?',
     starters: ['Most popular tours', 'How much is Saona?', 'Do you pick up at my hotel?', 'How do I pay?', 'Talk to a person'],
     greet: '¡Hola! 👋 How can I help you plan your Dominican day?',
@@ -94,18 +95,20 @@ export const bot = {
     chips: { price: 'Price', includes: 'What’s included?', duration: 'How long?', book: 'Book this tour', all: 'See all tours', human: 'Talk to a person', whatsapp: 'Open WhatsApp' },
     catChips: { islands: 'Beach & islands', sea: 'Sea & diving', adventure: 'Adventure', culture: 'Culture', night: 'Nightlife', private: 'Private group' },
     handoffMsg: (q) => `Hello! I’m writing from the website chat.${q ? `\n\nMy question: ${q}` : ''}`,
+    reviewsInfo: (r) => `We’re rated <b>${r.rating} out of 5</b> on TripAdvisor with <b>${r.count} reviews</b> — ${r.rank}. Real travellers, real reviews.`,
+    reviewsChip: 'Read reviews on TripAdvisor',
     viewTour: 'View tour',
   },
   es: {
-    name: 'Coco',
+    name: 'Domi',
     role: 'Asistente virtual · en línea',
-    open: '¿Preguntas? Pregúntale a Coco',
+    open: '¿Preguntas? Pregúntale a Domi',
     close: 'Cerrar chat',
     placeholder: 'Escribe tu pregunta…',
     send: 'Enviar',
     restart: 'Empezar de nuevo',
-    disclaimer: 'Coco es un asistente automático. Para confirmar una reserva, una persona de nuestro equipo te responde por WhatsApp.',
-    hello: '¡Hola! Soy Coco 🥥, el asistente de Harmony Excursions. Pregúntame por precios, qué incluye cada tour, la recogida o cuál te conviene más.',
+    disclaimer: 'Domi es un asistente automático. Para confirmar una reserva, una persona de nuestro equipo te responde por WhatsApp.',
+    hello: '¡Hola! Soy Domi 🤖🇩🇴, el asistente de Harmony Excursions. Pregúntame por precios, qué incluye cada tour, la recogida o cuál te conviene más.',
     helloBack: '¡Bienvenido de vuelta! ¿Qué más quieres saber?',
     starters: ['Tours más populares', '¿Cuánto cuesta Saona?', '¿Me recogen en el hotel?', '¿Cómo se paga?', 'Hablar con una persona'],
     greet: '¡Hola! 👋 ¿En qué te ayudo a planear tu día en RD?',
@@ -135,6 +138,8 @@ export const bot = {
     chips: { price: 'Precio', includes: '¿Qué incluye?', duration: '¿Cuánto dura?', book: 'Reservar este tour', all: 'Ver todos los tours', human: 'Hablar con una persona', whatsapp: 'Abrir WhatsApp' },
     catChips: { islands: 'Playa e islas', sea: 'Mar y buceo', adventure: 'Aventura', culture: 'Cultura', night: 'Fiesta y noche', private: 'Grupo privado' },
     handoffMsg: (q) => `¡Hola! Les escribo desde el chat de la web.${q ? `\n\nMi pregunta: ${q}` : ''}`,
+    reviewsInfo: (r) => `Tenemos <b>${r.rating} de 5</b> en TripAdvisor con <b>${r.count} reseñas</b>: ${r.rank}. Viajeros reales, reseñas reales.`,
+    reviewsChip: 'Leer reseñas en TripAdvisor',
     viewTour: 'Ver tour',
   },
 };

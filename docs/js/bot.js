@@ -1,4 +1,4 @@
-// Coco — asistente virtual de Harmony Excursions.
+// Domi — asistente virtual de Harmony Excursions.
 // Gratis: todo corre en el navegador. Entiende palabras clave en español e inglés,
 // responde con los datos reales de los tours (js/bot-<idioma>.js) y pasa a WhatsApp cuando no sabe.
 (() => {
@@ -65,7 +65,7 @@
       const b = document.createElement(c.href ? 'a' : 'button');
       b.className = 'bot__chip' + (c.wa ? ' bot__chip--wa' : '');
       b.textContent = c.label;
-      if (c.href) { b.href = c.href; if (c.wa) { b.target = '_blank'; b.rel = 'noopener'; } }
+      if (c.href) { b.href = c.href; if (c.wa || c.ext) { b.target = '_blank'; b.rel = 'noopener'; } }
       else { b.type = 'button'; b.addEventListener('click', () => ask(c.say || c.label)); }
       chipsEl.appendChild(b);
     }
@@ -146,6 +146,9 @@
       const list = D.tours.filter((x) => x.featured).slice(0, 4);
       return reply(`${S.pickTour}${cards(list)}`, list.map((x) => ({ label: x.title, say: `${raw} ${x.title}` })));
     }
+
+    // Reseñas y confianza.
+    if (is('reviews')) return reply(S.reviewsInfo(D.reviews), [{ label: S.reviewsChip, href: D.reviews.url, wa: false, ext: true }, ...D.tours.filter((x) => x.featured).slice(0, 2).map((x) => ({ label: x.title, say: x.title }))]);
 
     // Preguntas frecuentes.
     for (const k of ['pickup', 'payment', 'cancel', 'bring', 'rain']) if (is(k)) return reply(esc(D.faq[k]), [{ label: S.chips.all, href: `${base}${lang === 'en' ? '' : lang + '/'}tours/` }, humanChip()]);

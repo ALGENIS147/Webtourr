@@ -41,12 +41,17 @@ Reescribí todas. Confirma especialmente:
 - [ ] Delfines: que sea nado con entrenadores.
 - [ ] Coco Bongo: días disponibles (martes a domingo) y si incluye transporte.
 
-## 5. Fotos
+## 5. TripAdvisor — `src/data/site.mjs`
+- [ ] La calificación (4.8) y el número de reseñas (31) se escriben a mano: actualízalos cada mes.
+- [ ] Opcional: genera el widget oficial en tripadvisor.com/Widgets y pega el código en `tripadvisor.widget`.
+      Así las reseñas se muestran solas en la portada.
+
+## 6. Fotos
 - [ ] Algunas fotos parecen bajadas de internet (bancos de imágenes, otras agencias).
       Para una empresa seria hay que usar **fotos propias** o con licencia. Reemplázalas en `src/photos/`.
 - [ ] La foto de la lancha privada (`speedboat-private.avif`) es muy pequeña (378 px). Mejor una más grande.
 
-## 6. Para competir en serio (siguiente fase)
+## 7. Para competir en serio (siguiente fase)
 - [ ] Perfil de **Google Business** y **TripAdvisor**, y luego mostrar reseñas reales en la web.
 - [ ] Pago en línea o depósito (Stripe, PayPal o un sistema de reservas como FareHarbor / Bókun).
 - [ ] Analítica respetuosa (Plausible o Google Analytics con aviso de cookies).

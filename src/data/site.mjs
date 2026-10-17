@@ -13,6 +13,16 @@ export const site = {
   freeCancelHours: 24, // VERIFICAR: política de cancelación
   currency: 'USD',
   // Pon aquí los enlaces reales; si queda vacío, el icono no aparece.
-  social: { instagram: '', facebook: '', tiktok: '', tripadvisor: '' },
+  social: { instagram: '', facebook: '', tiktok: '', tripadvisor: 'https://www.tripadvisor.co.uk/Attraction_Review-g147293-d33283828-Reviews-Harmony_Excursions-Punta_Cana_La_Altagracia_Province_Dominican_Republic.html' },
+  // Calificación en TripAdvisor. ACTUALIZAR a mano de vez en cuando (última revisión abajo).
+  tripadvisor: {
+    url: 'https://www.tripadvisor.co.uk/Attraction_Review-g147293-d33283828-Reviews-Harmony_Excursions-Punta_Cana_La_Altagracia_Province_Dominican_Republic.html',
+    rating: 4.8,
+    count: 31,
+    rank: { en: '#194 of 976 boat tours & water sports in Punta Cana', es: '#194 de 976 tours en bote y deportes acuáticos en Punta Cana' },
+    checked: '2026-10-16',
+    // Código del widget oficial (tripadvisor.com/Widgets). Si lo pegas aquí, se muestra en la portada.
+    widget: '',
+  },
   founded: 2024,
 };
