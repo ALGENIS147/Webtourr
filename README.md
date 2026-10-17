@@ -15,7 +15,6 @@ src/
   build.mjs         generador del sitio
   map.mjs           mapa de República Dominicana
 docs/               sitio final generado (lo que publica GitHub Pages)
-legacy/             la página vieja, solo como referencia
 ```
 
 ## Cambiar algo
