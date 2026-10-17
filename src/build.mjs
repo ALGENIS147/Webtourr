@@ -39,20 +39,39 @@ const write = (path, html) => {
 const fill = (s) => s.replace('Up to 24 h', `Up to ${site.freeCancelHours} h`).replace('Hasta 24 h', `Hasta ${site.freeCancelHours} h`);
 
 // ---------- imágenes ----------
-// Anchos generados. Nunca se agranda una foto: el máximo es su tamaño original (hasta 2400 px).
-const WIDTHS = [480, 800, 1200, 1600, 2400];
+// Anchos generados. Nunca se agranda una foto: el máximo es su tamaño original (hasta 2000 px).
+const WIDTHS = [480, 800, 1200, 1600, 2000];
 // Calidad JPEG (0–100): la portada y la foto principal de cada tour van casi sin pérdida.
-const Q = { hero: 95, cover: 90, normal: 80 };
+const Q = { hero: 76, cover: 62, normal: 55 }; // escala de sips: 50 ≈ calidad "normal", ya se ve nítido
 const imgCache = new Map();
 function dims(file) {
   const out = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', file]).toString();
   return { w: +out.match(/pixelWidth: (\d+)/)[1], h: +out.match(/pixelHeight: (\d+)/)[1] };
 }
 // Devuelve { name, w, h, widths } y genera docs/img/name-W.jpg para cada ancho.
+// Mejora automática (src/tools/enhance.swift): auto-mejorar, nitidez y agrandado de fotos pequeñas.
+// El resultado se guarda en .cache/enhanced y solo se recalcula si cambia la foto original.
+const CACHE = join(ROOT, '.cache');
+function enhanced(file) {
+  const orig = join(PHOTOS, file);
+  if (!existsSync(orig)) throw new Error(`Falta la foto ${file}`);
+  const bin = join(CACHE, 'enhance');
+  const tool = join(ROOT, 'src/tools/enhance.swift');
+  if (!existsSync(bin) || statSync(bin).mtimeMs < statSync(tool).mtimeMs) {
+    mkdirSync(CACHE, { recursive: true });
+    execFileSync('swiftc', ['-O', tool, '-o', bin], { stdio: 'ignore' });
+  }
+  const out = join(CACHE, 'enhanced', `${file.replace(/\.[^.]+$/, '')}.jpg`);
+  if (!existsSync(out) || statSync(out).mtimeMs < Math.max(statSync(orig).mtimeMs, statSync(bin).mtimeMs)) {
+    mkdirSync(dirname(out), { recursive: true });
+    execFileSync(bin, [orig, out], { stdio: 'ignore' });
+  }
+  return out;
+}
+
 function image(file, name, quality = Q.normal) {
   if (imgCache.has(name)) return imgCache.get(name);
-  const src = join(PHOTOS, file);
-  if (!existsSync(src)) throw new Error(`Falta la foto ${file}`);
+  const src = enhanced(file);
   const { w, h } = dims(src);
   const max = Math.min(w, WIDTHS.at(-1));
   const uniq = [...new Set([...WIDTHS.filter((x) => x < max), max])];
@@ -60,8 +79,6 @@ function image(file, name, quality = Q.normal) {
   for (const width of uniq) {
     const dest = join(OUT, 'img', `${name}-${width}.jpg`);
     if (existsSync(dest) && statSync(dest).mtimeMs > statSync(src).mtimeMs) continue;
-    // Tamaño original de un JPEG: se copia tal cual, sin volver a comprimir (máxima calidad).
-    if (width === w && /\.jpe?g$/i.test(file)) { copyFileSync(src, dest); continue; }
     const args = ['-s', 'format', 'jpeg', '-s', 'formatOptions', String(quality)];
     if (width < w) args.push('--resampleWidth', String(width));
     execFileSync('sips', [...args, src, '--out', dest], { stdio: 'ignore' });
@@ -182,7 +199,6 @@ function header({ lang, path, from, current }) {
         <a class="btn btn--wa" href="${waLink(lang === 'en' ? 'Hello! I would like information about your excursions.' : '¡Hola! Quiero información sobre sus excursiones.')}" target="_blank" rel="noopener">${icon('whatsapp')}<span>${L.bookWhatsApp}</span></a>
       </div>
     </nav>
-    <button class="fav-open" type="button" data-fav-open aria-controls="favs" aria-expanded="false" aria-label="${L.favs.title}" hidden>${icon('heart')}<span class="fav-open__n" data-fav-count>0</span></button>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" data-menu>
       <span class="menu-btn__bars" aria-hidden="true"></span><span class="sr-only">${L.menu}</span>
     </button>
@@ -230,18 +246,6 @@ function footer({ lang, from }) {
     <p>${F.prices}</p>
   </div>
 </footer>
-<aside class="favs" id="favs" role="dialog" aria-modal="true" aria-labelledby="favs-title" data-favs data-root="${rel(from, 'index.html').replace(/index\.html$/, '')}" data-lang="${lang}" data-wa="${site.whatsapp}" data-saved="${esc(L.favs.saved)}" hidden>
-  <div class="favs__panel">
-    <header class="favs__head"><h2 class="favs__title" id="favs-title">${icon('heart')}${L.favs.title}</h2><button class="favs__close" type="button" data-favs-close aria-label="${L.close}">${icon('x')}</button></header>
-    <ul class="favs__list" data-favs-list></ul>
-    <p class="favs__empty" data-favs-empty>${L.favs.empty}</p>
-    <footer class="favs__foot" data-favs-foot>
-      <button class="btn btn--wa btn--block" type="button" data-favs-send>${icon('whatsapp')}${L.favs.send}</button>
-      <button class="favs__clear" type="button" data-favs-clear>${L.favs.clear}</button>
-    </footer>
-  </div>
-</aside>
-<script type="application/json" data-favs-i18n>${JSON.stringify({ intro: L.favs.msgIntro, outro: L.favs.msgOutro, remove: L.favs.removeShort }).replace(/</g, '\\u003c')}</script>
 <div class="bot" data-bot data-wa="${site.whatsapp}" data-root="${rel(from, 'index.html').replace(/index\.html$/, '')}" data-lang="${lang}">
   <button class="bot__launcher" type="button" aria-expanded="false" aria-controls="bot-panel" data-bot-toggle>
     <span class="bot__avatar" aria-hidden="true"></span><span class="bot__launch-txt">${bot[lang].open}</span>
@@ -295,12 +299,7 @@ function card(tour, lang, from, { big = false } = {}) {
       <div class="card__foot">${priceTag(tour, lang)}<span class="card__go" aria-hidden="true">${icon('arrow')}</span></div>
     </div>
   </a>
-  ${favButton(tour, lang)}
 </article>`;
-}
-function favButton(tour, lang, cls = '') {
-  const F = T[lang].favs;
-  return `<button class="fav${cls}" type="button" data-fav="${tour.slug}" aria-pressed="false" aria-label="${esc(F.add(tour.title[lang]))}" data-label-on="${esc(F.remove(tour.title[lang]))}" data-label-off="${esc(F.add(tour.title[lang]))}">${icon('heart')}</button>`;
 }
 
 // ---------- mapa ----------
@@ -671,7 +670,7 @@ function tourPage(tour, lang) {
     <li aria-current="page">${esc(tour.title[lang])}</li></ol></nav>
   <header class="tour__head">
     <p class="kicker">${categories[tour.cat][lang]}</p>
-    <div class="tour__title"><h1 class="display display--md">${esc(tour.title[lang])}</h1>${favButton(tour, lang, ' fav--lg')}</div>
+    <h1 class="display display--md">${esc(tour.title[lang])}</h1>
     <p class="tour__meta">
       <span>${icon('pin')}${places[tour.place].name}</span>
       <span>${icon('clock')}${tour.duration[lang]}</span>
@@ -847,6 +846,9 @@ function botScript(lang) {
     aliases,
     intents,
     site: { phone: site.phone, email: site.email, whatsapp: site.whatsapp, hours: site.hours[lang], zones: site.pickupZones[lang] },
+    childAges: site.childAges,
+    geo: { lat: places['punta-cana'].lat, lon: places['punta-cana'].lon },
+    weatherLabels: T[lang].home.weather,
     reviews: { url: site.tripadvisor.url, rating: fmtRating(site.tripadvisor.rating, lang), count: site.tripadvisor.count, rank: site.tripadvisor.rank[lang] },
     faq: { pickup: F[0][1], payment: F[1][1], cancel: F[2][1], kids: F[4][1], bring: F[5][1], rain: F[6][1], groups: F[7][1] },
     cats: Object.fromEntries(Object.entries(categories).map(([k, v]) => [k, v[lang]])),
@@ -867,6 +869,11 @@ function botScript(lang) {
         includes: tr.includes[lang],
         excludes: tr.excludes[lang],
         url: pageUrl(lang, `tours/${tr.slug}/`),
+        pricing: tr.pricing,
+        placeName: places[tr.place].name,
+        catName: categories[tr.cat][lang],
+        highlights: tr.highlights[lang],
+        seasonal: !!tr.season,
         img: `img/${img.name}-${img.widths[0]}.jpg`,
         kids: ['saona-island', 'swim-with-dolphins', 'hacienda-park-7-in-1', 'catalina-snorkel', 'samana-cayo-levantado'].includes(tr.slug),
       };
@@ -897,7 +904,7 @@ function build() {
   // Imagen para compartir (1200×630) y icono de Apple.
   const og = join(OUT, 'img/og-default.jpg');
   if (!existsSync(og)) {
-    execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '90', '--resampleWidth', '1200', join(PHOTOS, 'Isla-Catalina2.jpg'), '--out', og], { stdio: 'ignore' });
+    execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '90', '--resampleWidth', '1200', enhanced('Isla-Catalina2.jpg'), '--out', og], { stdio: 'ignore' });
     execFileSync('sips', ['-c', '630', '1200', og], { stdio: 'ignore' });
   }
   const touch = join(OUT, 'img/apple-touch-icon.png');
