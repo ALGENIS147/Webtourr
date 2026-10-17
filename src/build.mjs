@@ -9,6 +9,7 @@ import { site } from './data/site.mjs';
 import { tours, categories, places } from './data/tours.mjs';
 import { t as T } from './data/i18n.mjs';
 import { faq, legal } from './data/pages.mjs';
+import { bot, aliases, intents } from './data/bot.mjs';
 import { mapSvg, mapBox, project } from './map.mjs';
 import { icon } from './icons.mjs';
 
@@ -137,6 +138,7 @@ function head({ lang, path, from, title, desc, image: og, jsonld = [] }) {
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Manrope:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="${rel(from, 'css/site.css')}">
   <script src="${rel(from, 'js/site.js')}" defer></script>
+  <script src="${rel(from, 'js/bot.js')}" defer></script>
   ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join('\n  ')}
 </head>`;
 }
@@ -174,7 +176,7 @@ function header({ lang, path, from, current }) {
 </header>`;
 }
 
-function footer({ lang, from, floatWa = true }) {
+function footer({ lang, from }) {
   const L = T[lang];
   const F = L.footer;
   const catLinks = Object.entries(categories)
@@ -214,7 +216,27 @@ function footer({ lang, from, floatWa = true }) {
     <p>${F.prices}</p>
   </div>
 </footer>
-${floatWa ? `<a class="wa-float" href="${waLink(lang === 'en' ? 'Hello! I would like information about your excursions.' : '¡Hola! Quiero información sobre sus excursiones.')}" target="_blank" rel="noopener" aria-label="${L.whatsappFloat}">${icon('whatsapp')}</a>` : ''}
+<div class="bot" data-bot data-wa="${site.whatsapp}" data-root="${rel(from, 'index.html').replace(/index\.html$/, '')}" data-lang="${lang}">
+  <button class="bot__launcher" type="button" aria-expanded="false" aria-controls="bot-panel" data-bot-toggle>
+    <span class="bot__avatar" aria-hidden="true">🥥</span><span class="bot__launch-txt">${bot[lang].open}</span>
+  </button>
+  <section class="bot__panel" id="bot-panel" role="dialog" aria-modal="false" aria-labelledby="bot-title" hidden>
+    <header class="bot__head">
+      <span class="bot__avatar bot__avatar--lg" aria-hidden="true">🥥</span>
+      <div><h2 class="bot__title" id="bot-title">${bot[lang].name}</h2><p class="bot__role"><span class="bot__dot" aria-hidden="true"></span>${bot[lang].role}</p></div>
+      <button class="bot__icon" type="button" data-bot-restart aria-label="${bot[lang].restart}" title="${bot[lang].restart}">${icon('refresh')}</button>
+      <button class="bot__icon" type="button" data-bot-close aria-label="${bot[lang].close}">${icon('x')}</button>
+    </header>
+    <div class="bot__log" role="log" aria-live="polite" data-bot-log></div>
+    <div class="bot__chips" data-bot-chips></div>
+    <form class="bot__form" data-bot-form>
+      <label class="sr-only" for="bot-input">${bot[lang].placeholder}</label>
+      <input id="bot-input" name="q" autocomplete="off" maxlength="300" placeholder="${bot[lang].placeholder}" enterkeyhint="send">
+      <button type="submit" aria-label="${bot[lang].send}">${icon('send')}</button>
+    </form>
+    <p class="bot__fine">${bot[lang].disclaimer}</p>
+  </section>
+</div>
 </body>
 </html>`;
 }
@@ -638,7 +660,7 @@ ${related.length ? `<section class="section related" aria-labelledby="rel"><div 
   <button class="lightbox__nav" type="button" data-lb-next aria-label="${R.next}">${icon('arrow')}</button>
 </div>`;
   const ogImg = `img/${imgs[0].name}-${imgs[0].widths.find((w) => w >= 960) ?? imgs[0].widths.at(-1)}.jpg`;
-  return layout({ lang, path, from, title: `${tour.title[lang]} — ${f.unit === 'free' ? L.free : `${L.from} ${money(f.value)}`} | ${site.name}`, desc: `${tour.tagline[lang]} ${tour.body[lang][0]}`.slice(0, 158).replace(/\s\S*$/, '…'), image: ogImg, jsonld, current: 'tours', bodyClass: 'is-tour', floatWa: false }, main);
+  return layout({ lang, path, from, title: `${tour.title[lang]} — ${f.unit === 'free' ? L.free : `${L.from} ${money(f.value)}`} | ${site.name}`, desc: `${tour.tagline[lang]} ${tour.body[lang][0]}`.slice(0, 158).replace(/\s\S*$/, '…'), image: ogImg, jsonld, current: 'tours', bodyClass: 'is-tour' }, main);
 }
 
 function aboutPage(lang) {
@@ -738,6 +760,64 @@ function sitemap() {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join('\n')}\n</urlset>\n`;
 }
 
+
+// ---------- asistente virtual (Coco) ----------
+// Convierte un objeto a código JS conservando las funciones (las plantillas de texto del bot).
+function toJs(v) {
+  if (typeof v === 'function') return v.toString();
+  if (Array.isArray(v)) return `[${v.map(toJs).join(',')}]`;
+  if (v && typeof v === 'object') return `{${Object.entries(v).map(([k, x]) => `${JSON.stringify(k)}:${toJs(x)}`).join(',')}}`;
+  return JSON.stringify(v);
+}
+function priceText(tour, lang) {
+  const L = T[lang];
+  const p = tour.pricing;
+  const es = lang === 'es';
+  if (p.type === 'person') {
+    return p.child === p.adult
+      ? `${money(p.adult)} ${L.perPerson}`
+      : `${money(p.adult)} ${es ? 'por adulto' : 'per adult'} · ${money(p.child)} ${es ? `por niño (${site.childAges} años)` : `per child (ages ${site.childAges})`}`;
+  }
+  if (p.type === 'tiers') return p.tiers.map((x) => `${L.book.group(x.min, x.max)}: ${money(x.price)} ${x.unit === 'person' ? L.perPerson : x.max <= 2 ? (es ? 'en total' : 'total') : L.perGroup}`).join(' · ');
+  if (p.type === 'package') return `${p.options.map((o) => `${o.name[lang]} ${money(o.price)}`).join(' · ')} (${L.perPerson})`;
+  if (p.type === 'couple') return es ? `${money(p.first)} la primera pareja + ${money(p.extra)} cada pareja adicional` : `${money(p.first)} for the first couple + ${money(p.extra)} per extra couple`;
+  return L.freeWith;
+}
+function botScript(lang) {
+  const F = faq[lang];
+  const data = {
+    lang,
+    strings: bot[lang],
+    aliases,
+    intents,
+    site: { phone: site.phone, email: site.email, whatsapp: site.whatsapp, hours: site.hours[lang], zones: site.pickupZones[lang] },
+    faq: { pickup: F[0][1], payment: F[1][1], cancel: F[2][1], kids: F[4][1], bring: F[5][1], rain: F[6][1], groups: F[7][1] },
+    cats: Object.fromEntries(Object.entries(categories).map(([k, v]) => [k, v[lang]])),
+    tours: tours.map((tr) => {
+      const img = tourImages(tr)[0];
+      const f = fromPrice(tr);
+      return {
+        slug: tr.slug,
+        title: tr.title[lang],
+        tagline: tr.tagline[lang],
+        cat: tr.cat,
+        place: tr.place,
+        featured: !!tr.featured,
+        duration: tr.duration[lang],
+        price: priceText(tr, lang),
+        from: f.value,
+        perPerson: f.unit === 'perPerson',
+        includes: tr.includes[lang],
+        excludes: tr.excludes[lang],
+        url: pageUrl(lang, `tours/${tr.slug}/`),
+        img: `img/${img.name}-${img.widths[0]}.jpg`,
+        kids: ['saona-island', 'swim-with-dolphins', 'hacienda-park-7-in-1', 'catalina-snorkel', 'samana-cayo-levantado'].includes(tr.slug),
+      };
+    }),
+  };
+  return `/* Generado por src/build.mjs — no editar */\nwindow.HX_BOT=${toJs(data)};\n`;
+}
+
 // ---------- build ----------
 function build() {
   const t0 = Date.now();
@@ -755,6 +835,7 @@ function build() {
     for (const k of Object.keys(legal)) write(pageUrl(lang, `legal/${k}/`), legalPage(k, lang));
   }
   write('404.html', notFoundPage());
+  for (const lang of LANGS) write(`js/bot-${lang}.js`, botScript(lang));
 
   // Imagen para compartir (1200×630) y icono de Apple.
   const og = join(OUT, 'img/og-default.jpg');
@@ -768,7 +849,7 @@ function build() {
   }
 
   // Estáticos
-  for (const [src, dest] of [['src/static/site.css', 'css/site.css'], ['src/static/site.js', 'js/site.js'], ['src/static/favicon.svg', 'favicon.svg'], ['src/static/icon-512.png', 'img/icon-512.png'], ['CNAME', 'CNAME']]) {
+  for (const [src, dest] of [['src/static/site.css', 'css/site.css'], ['src/static/site.js', 'js/site.js'], ['src/static/bot.js', 'js/bot.js'], ['src/static/favicon.svg', 'favicon.svg'], ['src/static/icon-512.png', 'img/icon-512.png'], ['CNAME', 'CNAME']]) {
     mkdirSync(dirname(join(OUT, dest)), { recursive: true });
     copyFileSync(join(ROOT, src), join(OUT, dest));
   }
