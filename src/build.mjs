@@ -100,6 +100,9 @@ const logo = (from, lang) => `
   <span class="brand__word"><span class="brand__name">Harmony</span><span class="brand__sub">Excursions</span></span>
 </a>`;
 
+// Bandera dominicana (versión sin escudo) para detalles de marca.
+const flag = (cls = '') => `<svg class="flag ${cls}" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect width="13" height="8" fill="#002d62"/><rect x="17" width="13" height="8" fill="#ce1126"/><rect y="12" width="13" height="8" fill="#ce1126"/><rect x="17" y="12" width="13" height="8" fill="#002d62"/></svg>`;
+
 function waLink(text) {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 }
@@ -180,6 +183,7 @@ function footer({ lang, from, floatWa = true }) {
   const social = Object.entries(site.social).filter(([, v]) => v);
   return `
 <footer class="site-footer">
+  <div class="tricolor" aria-hidden="true"></div>
   <div class="wrap site-footer__grid">
     <div class="site-footer__brand">
       ${logo(from, lang)}
@@ -206,6 +210,7 @@ function footer({ lang, from, floatWa = true }) {
   </div>
   <div class="wrap site-footer__base">
     <p>© ${YEAR} ${site.name}. ${F.rights}</p>
+    <p class="made-in">${flag()}${F.madeIn}</p>
     <p>${F.prices}</p>
   </div>
 </footer>
@@ -320,9 +325,10 @@ function homePage(lang) {
   <div class="hero__media">${picture(from, hero, '', { eager: true })}</div>
   <div class="wrap hero__in">
     <div class="hero__copy">
-      <p class="eyebrow">${H.eyebrow}</p>
+      <p class="eyebrow">${flag()}${H.eyebrow}</p>
       <h1 class="display">${H.h1}</h1>
       <p class="hero__lead">${H.lead}</p>
+      <p class="localtime" data-clock data-lang="${lang === 'es' ? 'es-DO' : 'en-US'}" hidden>${icon('sun')}<span>${H.localTime}</span><strong data-clock-time></strong></p>
     </div>
     <form class="finder" action="${rel(from, pageUrl(lang, 'tours/'))}" data-finder data-base="${rel(from, pageUrl(lang, 'tours/'))}">
       <p class="finder__title">${H.finder.title}</p>
@@ -361,12 +367,35 @@ function homePage(lang) {
   </div>
 </section>
 
+<section class="section sabor" aria-labelledby="sabor-title">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><div><p class="kicker">${H.saborKicker}</p><h2 class="h2" id="sabor-title">${H.saborTitle}</h2></div><p class="lead sabor__lead">${H.saborLead}</p></div>
+    <ul class="sabor__grid">${H.sabor.map(([word, label, text, tone, slug], i) => {
+      const tr = tours.find((x) => x.slug === slug);
+      return `<li class="sabor__item sabor__item--${tone}" data-reveal style="--d:${(i % 3) * 80}ms">
+        <p class="sabor__label">${label}</p>
+        <h3 class="sabor__word">${word}</h3>
+        <p class="sabor__text">${text}</p>
+        ${tr ? `<a class="sabor__link" href="${rel(from, pageUrl(lang, `tours/${tr.slug}/`))}">${esc(tr.title[lang])}${icon('arrow')}</a>` : ''}
+      </li>`;
+    }).join('')}</ul>
+  </div>
+</section>
+
 ${mapSection(lang, from)}
 
 <section class="section how" aria-labelledby="how-title">
   <div class="wrap">
     <div class="sec-head sec-head--center" data-reveal><div><p class="kicker">${H.howKicker}</p><h2 class="h2" id="how-title">${H.howTitle}</h2></div></div>
     <ol class="steps">${H.how.map(([a, b], i) => `<li data-reveal style="--d:${i * 90}ms"><span class="steps__n">0${i + 1}</span><h3>${a}</h3><p>${b}</p></li>`).join('')}</ol>
+  </div>
+</section>
+
+<section class="slang" aria-labelledby="slang-title">
+  <div class="tricolor" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="sec-head" data-reveal><div><p class="kicker kicker--light">${H.slangKicker}</p><h2 class="h2" id="slang-title">${H.slangTitle}</h2></div>${flag('flag--lg')}</div>
+    <dl class="slang__list">${H.slang.map(([w, m], i) => `<div data-reveal style="--d:${(i % 5) * 60}ms"><dt lang="es">${w}</dt><dd>${m}</dd></div>`).join('')}</dl>
   </div>
 </section>
 

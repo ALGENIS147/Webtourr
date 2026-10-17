@@ -15,6 +15,13 @@
   --coral-ink: #d63d20;
   --sun: #f2b23a;
   --wa: #1fae5b;
+  /* Colores dominicanos */
+  --rd-blue: #002d62;
+  --rd-red: #ce1126;
+  --larimar: #8fd5e3;
+  --cacao: #4a2e1f;
+  --amber: #e9a23b;
+  --palm: #236b45;
   --wa-ink: #148a46;
   --muted: #5a6d73;
   --line: #e4dccf;
@@ -625,6 +632,60 @@ a.ccard:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
   .lightbox__nav { position: absolute; bottom: 24px; left: 30%; }
   .lightbox__nav:not(.lightbox__nav--prev) { left: auto; right: 30%; }
   .accordion details p { padding-right: 0; }
+}
+
+/* ---------- toque dominicano ---------- */
+.flag { width: 22px; height: auto; border-radius: 2px; box-shadow: 0 0 0 1px rgb(0 0 0 / .08); flex: none; }
+.flag--lg { width: 64px; border-radius: 4px; }
+.eyebrow .flag { width: 20px; }
+.tricolor { height: 5px; background: linear-gradient(90deg, var(--rd-blue) 0 42%, var(--white) 42% 58%, var(--rd-red) 58% 100%); }
+.finder { position: relative; overflow: hidden; }
+.finder::before { content: ''; position: absolute; inset: 0 0 auto; height: 5px; background: linear-gradient(90deg, var(--rd-blue) 0 42%, var(--white) 42% 58%, var(--rd-red) 58% 100%); }
+.localtime[hidden] { display: none; }
+.localtime { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; padding: 8px 14px; border-radius: 999px; background: rgb(255 255 255 / .12); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 14px; color: rgb(255 255 255 / .85); }
+.localtime .i { color: var(--sun); width: 18px; height: 18px; }
+.localtime strong { color: var(--white); font-variant-numeric: tabular-nums; }
+
+.sabor__lead { max-width: 44ch; }
+.sabor__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 1.6vw, 22px); }
+.sabor__item {
+  --bg: var(--sand); --fg: var(--ink); --accent: var(--sea);
+  position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 10px;
+  min-height: 300px; padding: 30px 28px; border-radius: var(--r); background: var(--bg); color: var(--fg);
+}
+.sabor__item::after { /* sello: círculo decorativo como el de un sello de pasaporte */
+  content: ''; position: absolute; right: -40px; top: -40px; width: 150px; aspect-ratio: 1; border-radius: 50%;
+  border: 1.5px dashed currentColor; opacity: .18;
+}
+.sabor__item--flag-blue { --bg: var(--rd-blue); --fg: var(--white); --accent: var(--larimar); }
+.sabor__item--flag-red { --bg: var(--rd-red); --fg: var(--white); --accent: #ffd7c9; }
+.sabor__item--larimar { --bg: var(--larimar); --fg: var(--ink); --accent: var(--rd-blue); }
+.sabor__item--cacao { --bg: var(--cacao); --fg: #f6e7d6; --accent: var(--amber); }
+.sabor__item--amber { --bg: var(--amber); --fg: #2a1a0c; --accent: var(--cacao); }
+.sabor__item--palm { --bg: var(--palm); --fg: var(--white); --accent: #bfe7a8; }
+.sabor__label { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.sabor__word { font: italic 400 clamp(32px, 3.2vw, 44px)/1 var(--f-display); letter-spacing: -.02em; }
+.sabor__text { opacity: .88; line-height: 1.55; }
+.sabor__link { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 14px; font-weight: 700; font-size: 14px; text-decoration: none; color: var(--fg); }
+.sabor__link .i { transition: transform .2s var(--ease); }
+.sabor__link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.sabor__link:hover .i { transform: translateX(3px); }
+
+.slang { background: var(--ink); color: var(--white); }
+.slang > .wrap { padding-block: clamp(64px, 8vw, 112px); }
+.slang .sec-head { align-items: center; }
+.slang__list { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid rgb(255 255 255 / .14); }
+.slang__list > div { padding: 26px 20px 26px 0; border-bottom: 1px solid rgb(255 255 255 / .14); }
+.slang__list dt { font: 500 clamp(24px, 2.2vw, 30px)/1.1 var(--f-display); color: var(--sun); }
+.slang__list dd { margin-top: 8px; color: rgb(255 255 255 / .72); font-size: 15px; }
+.made-in { display: inline-flex; align-items: center; gap: 8px; }
+@media (max-width: 900px) {
+  .sabor__grid { grid-template-columns: 1fr 1fr; }
+  .slang__list { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .sabor__grid { grid-template-columns: 1fr; }
+  .sabor__item { min-height: 0; }
 }
 
 /* ---------- movimiento ---------- */

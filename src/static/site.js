@@ -39,6 +39,16 @@
     reveal.forEach((el) => io.observe(el));
   } else reveal.forEach((el) => el.classList.add('is-in'));
 
+  // ---------- hora local de Punta Cana ----------
+  const clock = $('[data-clock]');
+  if (clock) {
+    const fmt = new Intl.DateTimeFormat(clock.dataset.lang, { timeZone: 'America/Santo_Domingo', hour: 'numeric', minute: '2-digit' });
+    const tick = () => { $('[data-clock-time]', clock).textContent = fmt.format(new Date()); };
+    tick();
+    clock.hidden = false;
+    setInterval(tick, 30000);
+  }
+
   // ---------- fechas: mínimo mañana ----------
   const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
   $$('[data-mindate]').forEach((i) => { i.min = isoDate(tomorrow); });
