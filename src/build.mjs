@@ -435,6 +435,14 @@ function homePage(lang) {
   </div>
 </section>
 
+<section class="moments" aria-labelledby="moments-title">
+  <div class="wrap"><div class="sec-head" data-reveal><div><p class="kicker">${H.momentsKicker}</p><h2 class="h2" id="moments-title">${H.momentsTitle}</h2></div></div></div>
+  ${[0, 1].map((row) => {
+    const pics = tours.flatMap((tr) => tourImages(tr).slice(1, 3).map((im) => ({ im, tr }))).filter((_, i) => i % 2 === row).slice(0, 12);
+    return `<div class="moments__row${row ? ' moments__row--rev' : ''}"><div class="moments__track">${[...pics, ...pics].map(({ im, tr }, i) => `<a class="moments__item" href="${rel(from, pageUrl(lang, `tours/${tr.slug}/`))}"${i >= pics.length ? ' aria-hidden="true" tabindex="-1"' : ''}>${picture(from, im, im.alt[lang], { sizes: '320px' })}<span>${esc(tr.title[lang])}</span></a>`).join('')}</div></div>`;
+  }).join('')}
+</section>
+
 ${mapSection(lang, from)}
 
 <section class="section how" aria-labelledby="how-title">
@@ -670,7 +678,8 @@ function tourPage(tour, lang) {
     <li aria-current="page">${esc(tour.title[lang])}</li></ol></nav>
   <header class="tour__head">
     <p class="kicker">${categories[tour.cat][lang]}</p>
-    <h1 class="display display--md">${esc(tour.title[lang])}</h1>
+    <div class="tour__title"><h1 class="display display--md">${esc(tour.title[lang])}</h1>
+      <button class="share" type="button" data-share data-title="${esc(tour.title[lang])}" data-text="${esc(R.shareText(tour.title[lang]))}" data-done="${esc(R.shared)}">${icon('share')}<span>${R.share}</span></button></div>
     <p class="tour__meta">
       <span>${icon('pin')}${places[tour.place].name}</span>
       <span>${icon('clock')}${tour.duration[lang]}</span>

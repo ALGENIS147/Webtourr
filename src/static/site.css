@@ -840,6 +840,26 @@ img.lq { background-size: cover; background-position: center; background-color: 
 .card.is-tilting .card__link::after { opacity: 1; }
 .card.is-tilting .card__link { transition: transform .08s linear, box-shadow .35s var(--ease); }
 
+/* Compartir */
+.tour__title { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.share { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 8px; padding: 10px 18px; border: 0; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1.5px var(--line-2); font-weight: 700; font-size: 14px; transition: box-shadow .2s, transform .2s var(--ease); }
+.share:hover { box-shadow: inset 0 0 0 1.5px var(--ink); transform: translateY(-1px); }
+.share.is-done { box-shadow: inset 0 0 0 1.5px var(--wa); color: var(--wa-ink); }
+
+/* Momentos: dos cintas de fotos en sentidos opuestos */
+.moments { padding-block: clamp(64px, 8vw, 112px) clamp(48px, 6vw, 80px); overflow: hidden; }
+.moments__row { overflow: hidden; margin-top: 14px; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.moments__track { display: flex; gap: 14px; width: max-content; animation: marquee 70s linear infinite; }
+.moments__row--rev .moments__track { animation-direction: reverse; animation-duration: 85s; }
+.moments__row:hover .moments__track { animation-play-state: paused; }
+.moments__item { position: relative; flex: none; width: 300px; aspect-ratio: 4 / 3; border-radius: var(--r); overflow: hidden; }
+.moments__row--rev .moments__item { width: 240px; aspect-ratio: 1; }
+.moments__item img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+.moments__item:hover img { transform: scale(1.06); }
+.moments__item span { position: absolute; inset: auto 0 0; padding: 30px 14px 12px; background: linear-gradient(0deg, rgb(6 26 32 / .75), transparent); color: var(--white); font-weight: 700; font-size: 13px; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s var(--ease); }
+.moments__item:hover span, .moments__item:focus-visible span { opacity: 1; transform: none; }
+@media (max-width: 640px) { .moments__item { width: 220px; } .moments__row--rev .moments__item { width: 170px; } }
+
 /* ---------- movimiento ---------- */
 [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0ms); }
 [data-reveal].is-in { opacity: 1; transform: none; }

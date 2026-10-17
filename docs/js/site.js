@@ -67,6 +67,21 @@
       .catch(() => {}); // sin clima no pasa nada: el reloj sigue funcionando
   }
 
+  // ---------- compartir un tour ----------
+  const shareBtn = $('[data-share]');
+  if (shareBtn) shareBtn.addEventListener('click', async () => {
+    const data = { title: shareBtn.dataset.title, text: shareBtn.dataset.text, url: location.href.split('?')[0].split('#')[0] };
+    try {
+      if (navigator.share) { await navigator.share(data); return; }
+      await navigator.clipboard.writeText(`${data.text} ${data.url}`);
+      const label = $('span', shareBtn);
+      const prev = label.textContent;
+      label.textContent = shareBtn.dataset.done;
+      shareBtn.classList.add('is-done');
+      setTimeout(() => { label.textContent = prev; shareBtn.classList.remove('is-done'); }, 2000);
+    } catch { /* el cliente canceló */ }
+  });
+
   // ---------- tarjetas 3D (solo con mouse y sin "reducir movimiento") ----------
   if (matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.addEventListener('pointermove', (e) => {
