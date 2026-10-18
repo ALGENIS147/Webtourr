@@ -360,7 +360,7 @@ button { cursor: pointer; }
 .groups__media { position: absolute; inset: 0; z-index: -1; }
 .groups__media img { width: 100%; height: 100%; object-fit: cover; }
 .groups__media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(6 26 32 / .86), rgb(6 26 32 / .2)); }
-.groups__in { max-width: 680px; margin-inline: 0; margin-left: max(var(--gutter), calc((100vw - var(--wrap)) / 2 + var(--gutter))); padding-inline: 0; }
+.groups__in { width: auto; max-width: 680px; margin-inline: 0; margin-right: var(--gutter); margin-left: max(var(--gutter), calc((100vw - var(--wrap)) / 2 + var(--gutter))); padding-inline: 0; }
 .groups .lead { color: rgb(255 255 255 / .85); margin: 18px 0 32px; }
 
 /* ---------- acordeón ---------- */
@@ -786,7 +786,11 @@ a.ccard:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
 .bot__form button { display: grid; place-items: center; width: 46px; height: 46px; border: 0; border-radius: 50%; background: var(--coral); color: var(--white); flex: none; }
 .bot__form button:hover { background: var(--coral-ink); }
 .bot__fine { padding: 0 16px 10px; background: var(--white); font-size: 11.5px; line-height: 1.4; color: var(--muted); }
-@media (max-width: 980px) { .is-tour .bot { bottom: calc(88px + env(safe-area-inset-bottom)); } }
+@media (max-width: 980px) {
+  .bot { transition: bottom .35s var(--ease); }
+  body.mbar-on .bot { bottom: calc(88px + env(safe-area-inset-bottom)); }
+  body.book-in-view .bot:not(.is-open) .bot__launcher { transform: translateY(150%); opacity: 0; pointer-events: none; }
+}
 @media (max-width: 640px) {
   .bot { right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .bot__launch-txt { display: none; }
@@ -859,6 +863,65 @@ img.lq { background-size: cover; background-position: center; background-color: 
 .moments__item span { position: absolute; inset: auto 0 0; padding: 30px 14px 12px; background: linear-gradient(0deg, rgb(6 26 32 / .75), transparent); color: var(--white); font-weight: 700; font-size: 13px; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s var(--ease); }
 .moments__item:hover span, .moments__item:focus-visible span { opacity: 1; transform: none; }
 @media (max-width: 640px) { .moments__item { width: 220px; } .moments__row--rev .moments__item { width: 170px; } }
+
+/* ---------- celulares ---------- */
+@media (max-width: 640px) {
+  :root { --header-h: 64px; }
+  .brand__mark { width: 34px; height: 34px; }
+  .brand__name { font-size: 21px; }
+  /* Hero: insignia y reloj compactos, en una sola línea cada uno */
+  .hero__in { padding-top: calc(var(--header-h) + 40px); padding-bottom: 88px; gap: 28px; }
+  .hero__lead { margin-top: 18px; font-size: 16.5px; }
+  .ta-badge, .localtime { margin-top: 18px; font-size: 13px; padding: 7px 12px; white-space: nowrap; }
+  .localtime__label { font-size: 0; }
+  .localtime__label::after { content: attr(data-short); font-size: 13px; }
+  .localtime__wx:not(:empty)::before { margin: 0 6px 0 0; }
+  /* Grupos privados: el texto no se sale de la pantalla */
+  .groups__in { width: auto; margin-inline: var(--gutter); max-width: none; }
+  .groups { padding-block: 88px; }
+  .groups__media::after { background: linear-gradient(180deg, rgb(6 26 32 / .55), rgb(6 26 32 / .85)); }
+  /* Secciones con menos aire vertical */
+  .section { padding-block: 64px; }
+  .sec-head { margin-bottom: 24px; }
+  .h2 { font-size: 30px; }
+  .trust__list { padding-block: 20px 28px; }
+  /* Galería del tour: carrusel que se desliza con el dedo */
+  .gallery, .gallery--1, .gallery--2, .gallery--3, .gallery--4 {
+    display: flex; height: auto; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); border-radius: 0; scrollbar-width: none;
+  }
+  .gallery::-webkit-scrollbar { display: none; }
+  .gallery .gallery__item, .gallery--4 .gallery__item:nth-child(4) {
+    display: block; flex: 0 0 86%; aspect-ratio: 4 / 3; border-radius: var(--r); scroll-snap-align: center;
+  }
+  .gallery .gallery__item:only-child { flex-basis: 100%; }
+  .tour__head { padding-block: 20px; }
+  .tour__meta { gap: 8px 16px; font-size: 14px; }
+  .tour__tagline { font-size: 21px; padding-bottom: 24px; }
+  .tour__content { gap: 32px; }
+  .share { margin-top: 0; }
+  /* Formulario de reserva */
+  .book__card { padding: 20px; border-radius: var(--r); }
+  .book__head { align-items: center; }
+  .book__head .price { flex-direction: row; align-items: baseline; gap: 6px; }
+  .book__total strong { font-size: 30px; }
+  /* Contacto: el correo largo no se parte a la mitad */
+  .ccard strong { font-size: 15px; overflow-wrap: anywhere; }
+  .ccard { padding: 16px 18px; }
+  /* Pie de página más compacto */
+  .site-footer__grid { padding-block: 48px 32px; gap: 24px; }
+  .site-footer__base { flex-direction: column; gap: 8px; }
+  /* Domi: el botón se esconde mientras bajas y vuelve al subir o al detenerte */
+  .bot__launcher { width: 56px; height: 56px; min-height: 0; justify-content: center; }
+  .bot.is-tucked .bot__launcher { transform: translateY(150%); opacity: 0; pointer-events: none; }
+  .bot__launcher { transition: transform .35s var(--ease), opacity .25s, box-shadow .25s; }
+  /* Mapa: pines más grandes para el dedo */
+  .pin__dot { width: 14px; height: 14px; }
+  .pin__btn { padding: 6px 8px 6px 6px; }
+}
+/* Menú abierto: Domi no tapa el botón de WhatsApp */
+body.menu-open .bot { display: none; }
+.nav a:focus:not(:focus-visible) { outline: none; }
 
 /* ---------- movimiento ---------- */
 [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0ms); }

@@ -474,4 +474,16 @@
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) close(); });
   form.addEventListener('submit', (e) => { e.preventDefault(); ask(input.value); input.value = ''; });
   log.addEventListener('click', (e) => { if (e.target.closest('a')) save(); });
+
+  // En el celular el botón se esconde mientras el cliente baja (para no tapar contenido)
+  // y vuelve cuando sube o se detiene un momento.
+  let lastY = scrollY, idle;
+  addEventListener('scroll', () => {
+    if (!panel.hidden || innerWidth > 640) return;
+    const y = scrollY;
+    if (Math.abs(y - lastY) > 6) root.classList.toggle('is-tucked', y > lastY && y > 240);
+    lastY = y;
+    clearTimeout(idle);
+    idle = setTimeout(() => root.classList.remove('is-tucked'), 1200);
+  }, { passive: true });
 })();

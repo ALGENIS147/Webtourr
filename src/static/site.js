@@ -16,13 +16,14 @@
   const menuBtn = $('[data-menu]');
   const nav = $('#nav');
   if (menuBtn && nav) {
-    const setMenu = (open) => {
+    const setMenu = (open, keyboard = false) => {
       menuBtn.setAttribute('aria-expanded', String(open));
       nav.classList.toggle('is-open', open);
       document.body.classList.toggle('menu-open', open);
-      if (open) $('a', nav)?.focus();
+      if (open && keyboard) $('a', nav)?.focus();
     };
-    menuBtn.addEventListener('click', () => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
+    // Con teclado (detail = 0) llevamos el foco al primer enlace; con el dedo no, para no mostrar el recuadro de foco.
+    menuBtn.addEventListener('click', (e) => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true', e.detail === 0));
     nav.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
     addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && nav.classList.contains('is-open')) { setMenu(false); menuBtn.focus(); }
@@ -385,7 +386,11 @@
     // Visible después de bajar un poco y mientras el formulario aún no aparece en pantalla.
     const update = () => {
       const r = book.getBoundingClientRect();
-      mbar.classList.toggle('is-visible', scrollY > 400 && r.top > innerHeight);
+      const barOn = scrollY > 400 && r.top > innerHeight;
+      mbar.classList.toggle('is-visible', barOn);
+      // Avisos para el botón de Domi: subir sobre la barra, o apartarse si el formulario está a la vista.
+      document.body.classList.toggle('mbar-on', barOn);
+      document.body.classList.toggle('book-in-view', r.top < innerHeight && r.bottom > 0);
     };
     addEventListener('scroll', update, { passive: true });
     update();

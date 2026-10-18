@@ -381,7 +381,7 @@ function homePage(lang) {
       <h1 class="display">${H.h1}</h1>
       <p class="hero__lead">${H.lead}</p>
       <a class="ta-badge" href="${site.tripadvisor.url}" target="_blank" rel="noopener">${ratingDots(site.tripadvisor.rating)}<span>${H.reviewsBadge(fmtRating(site.tripadvisor.rating, lang), site.tripadvisor.count)}</span></a>
-      <p class="localtime" data-clock data-lang="${lang === 'es' ? 'es-DO' : 'en-US'}" hidden>${icon('sun')}<span>${H.localTime}</span><strong data-clock-time></strong><span class="localtime__wx" data-wx data-labels="${esc(JSON.stringify(H.weather))}" data-lat="${places['punta-cana'].lat}" data-lon="${places['punta-cana'].lon}"></span></p>
+      <p class="localtime" data-clock data-lang="${lang === 'es' ? 'es-DO' : 'en-US'}" hidden>${icon('sun')}<span class="localtime__label" data-short="Punta Cana">${H.localTime}</span><strong data-clock-time></strong><span class="localtime__wx" data-wx data-labels="${esc(JSON.stringify(H.weather))}" data-lat="${places['punta-cana'].lat}" data-lon="${places['punta-cana'].lon}"></span></p>
     </div>
     <form class="finder" action="${rel(from, pageUrl(lang, 'tours/'))}" data-finder data-base="${rel(from, pageUrl(lang, 'tours/'))}">
       <p class="finder__title">${H.finder.title}</p>
