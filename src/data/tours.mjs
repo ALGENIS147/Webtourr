@@ -34,6 +34,116 @@ const night = { en: 'Evening', es: 'Noche' };
 
 export const tours = [
   {
+    slug: 'saona-vip-3-beaches',
+    featured: true,
+    cat: 'islands',
+    place: 'saona',
+    duration: { en: 'Full day · 6:00 a.m. – 7:00 p.m.', es: 'Día completo · 6:00 a. m. – 7:00 p. m.' },
+    badge: { en: '#1 excursion in Punta Cana', es: 'La excursión #1 de Punta Cana' },
+    title: { en: 'Saona Island VIP: 3 Beaches', es: 'Isla Saona VIP: 3 Playas' },
+    tagline: {
+      en: 'Three beaches, a fishing village, natural pools with starfish and a seafront buffet — all inclusive.',
+      es: 'Tres playas, un pueblo de pescadores, piscinas naturales con estrellas de mar y buffet frente al mar, todo incluido.',
+    },
+    body: {
+      en: [
+        'Saona was chosen as a filming location for Pirates of the Caribbean — and once you see it, you’ll understand why. This VIP version visits three beaches instead of one, spending about 1 hour and 30 minutes at each, with plenty of time to swim, take photos and relax with no rush.',
+        'You’ll stop at Flamingo Beach, have a buffet lunch in the fishing village of Mano Juan, look for sea turtles at the protected sanctuary, cross the Catuano Channel and the mangroves, and swim next to starfish in the natural pools. If there is sargassum or bad weather, that stop moves to Playa Abanico so you always get the best possible day.',
+      ],
+      es: [
+        'Saona fue elegida para filmar Piratas del Caribe, y cuando la veas entenderás por qué. Esta versión VIP visita tres playas en vez de una, con aproximadamente 1 hora y 30 minutos en cada una: tiempo de sobra para bañarte, tomar fotos y disfrutar sin prisas.',
+        'Pararás en la Playa de los Flamencos, almorzarás tipo buffet en el pueblo de pescadores de Mano Juan, buscarás tortugas en el santuario protegido, cruzarás el Canal de Catuano y los manglares, y nadarás junto a las estrellas de mar en las piscinas naturales. Si hay sargazo o mal clima, esa parada se hace en Playa Abanico para garantizarte siempre la mejor experiencia.',
+      ],
+    },
+    highlights: {
+      en: ['Three different beaches, about 1 h 30 min at each', 'Buffet lunch facing the sea in Mano Juan', 'Natural pools with starfish', 'Open bar with Brugal and Barceló rum'],
+      es: ['Tres playas distintas, aprox. 1 h 30 min en cada una', 'Almuerzo buffet frente al mar en Mano Juan', 'Piscinas naturales con estrellas de mar', 'Barra libre con ron Brugal y Barceló'],
+    },
+    stops: {
+      en: [
+        ['🏝', 'Flamingo Beach', 'One of the most beautiful beaches on Saona.'],
+        ['🏡', 'Mano Juan fishing village', 'Where the buffet lunch is served.'],
+        ['🐢', 'Sea turtle sanctuary', 'You may see turtles if they are in the protected area that day. It is a sanctuary, not an aquarium, so sightings are not guaranteed.'],
+        ['🏝', 'Playa del Canto', ''],
+        ['🌊', 'Catuano Channel', 'Panoramic views.'],
+        ['🎋', 'Protected mangroves', ''],
+        ['⭐', 'Natural pools', 'Swim next to the starfish and watch them — touching them is not allowed.'],
+      ],
+      es: [
+        ['🏝', 'Playa de los Flamencos', 'Una de las playas más hermosas de Saona.'],
+        ['🏡', 'Pueblo de pescadores Mano Juan', 'Aquí se hace el almuerzo tipo buffet.'],
+        ['🐢', 'Santuario de tortugas marinas', 'Podrás ver tortugas solo si ese día hay en la zona protegida. No es un acuario, es un santuario, así que no están garantizadas.'],
+        ['🏝', 'Playa del Canto', ''],
+        ['🌊', 'Canal de Catuano', 'Vista panorámica.'],
+        ['🎋', 'Área protegida de los manglares', ''],
+        ['⭐', 'Piscinas naturales', 'Nada junto a las estrellas de mar y obsérvalas (está prohibido tocarlas).'],
+      ],
+    },
+    includes: {
+      en: ['Transport from/to your hotel (selected hotels)', 'Catamaran or speedboat', 'National park entrance fees', 'Tropical fruit skewers', 'Snacks (tequeños and empanadas)', 'Alcoholic drinks (Brugal / Barceló rum)', 'Soft drinks, sodas and water', 'Trained national guide (English, Spanish, Portuguese, French)', 'Seafront buffet lunch and picadera'],
+      es: ['Transporte desde/hacia tu hotel (hoteles seleccionados)', 'Motomarán o lancha rápida', 'Tasas de entrada al Parque Nacional', 'Brochetas de frutas tropicales', 'Snack (tequeños y empanadas)', 'Bebidas alcohólicas (Ron Brugal / Ron Barceló)', 'Refrescos, gaseosas y agua', 'Guía nacional capacitado (inglés, español, portugués y francés)', 'Almuerzo tipo buffet frente al mar y picadera'],
+    },
+    excludes: {
+      en: ['Snorkel gear (not offered — bring your own if you want to snorkel)', 'Tips'],
+      es: ['Equipo de snorkel (no lo ofrecemos: si deseas hacer snorkel, trae el tuyo)', 'Propinas'],
+    },
+    addons: {
+      en: [
+        ['🦞', 'Lobster & champagne with your lunch', '+$54 per adult · +$40 per child. Must be requested in advance.'],
+        ['🍻', 'Presidente beer packs', 'Ask us for prices.'],
+        ['🚌', 'Transport from Santo Domingo', 'Additional cost.'],
+      ],
+      es: [
+        ['🦞', 'Langosta y champagne durante tu almuerzo', '+54 USD por adulto · +40 USD por niño. Debe solicitarse con anticipación.'],
+        ['🍻', 'Packs de cervezas Presidente', 'Consúltanos precios.'],
+        ['🚌', 'Transporte desde Santo Domingo', 'Tiene un costo adicional.'],
+      ],
+    },
+    birthday: {
+      en: 'Is it your birthday that day? Tell us when you book and celebrate with us — we have a special gift to make your day even more unforgettable. 🎁',
+      es: '¿Cumples años ese día? Cuéntanoslo al reservar y celébralo con nosotros: tenemos un detalle especial de regalo para hacer tu día aún más inolvidable. 🎁',
+    },
+    schedule: {
+      en: [['Pickup in Punta Cana', 'from 6:00 a.m.'], ['Pickup in Bayahibe', 'from 8:00 a.m.'], ['Exact pickup time', 'confirmed the day before, 6:00–7:00 p.m.'], ['Tour starts', '9:30–10:00 a.m.'], ['Back in Bayahibe', '5:00–6:00 p.m.'], ['Back at your hotel', '6:00–7:00 p.m.']],
+      es: [['Recogida en Punta Cana', 'desde las 6:00 a. m.'], ['Recogida en Bayahibe', 'desde las 8:00 a. m.'], ['Hora exacta de recogida', 'se confirma el día anterior entre 6:00 y 7:00 p. m.'], ['Inicio del tour', '9:30 a 10:00 a. m.'], ['Regreso a Bayahibe', '5:00 a 6:00 p. m.'], ['Regreso a los hoteles', '6:00 a 7:00 p. m.']],
+    },
+    days: [1, 2, 3, 4, 5, 6], // lunes a sábado
+    daysLabel: { en: 'Monday to Saturday', es: 'De lunes a sábado' },
+    cancel: {
+      en: 'Cancel before 5:00 p.m. the day before for a 75% refund (25% is non-refundable).',
+      es: 'Cancela antes de las 5:00 p. m. del día anterior y recibes el 75% de reembolso (el 25% no es reembolsable).',
+    },
+    policies: {
+      en: [
+        ['Bookings', 'At least 1 day in advance. Same-day bookings are not possible.'],
+        ['Confirmation', 'Required the day before, before 5:00 p.m. If you don’t confirm, you can’t join.'],
+        ['Rescheduling', 'Only until 5:00 p.m. the day before.'],
+        ['Cancellations', 'Before 5:00 p.m. the day before: 75% refund (25% is non-refundable).'],
+        ['No-show', 'No refund if you don’t show up or don’t let us know in time (applies to full and partial absences).'],
+        ['Payment', 'Minimum 25% deposit to book.'],
+      ],
+      es: [
+        ['Reservas', 'Mínimo 1 día antes. No se reserva el mismo día.'],
+        ['Confirmación', 'Obligatoria el día previo antes de las 5:00 p. m. Si no confirmas, no puedes ir.'],
+        ['Reprogramación', 'Solo hasta las 5:00 p. m. del día anterior.'],
+        ['Cancelaciones', 'Antes de las 5:00 p. m. del día anterior, reembolso del 75% (el 25% no es reembolsable).'],
+        ['No-show', 'Sin reembolso si no te presentas o no avisas a tiempo (aplica a ausencias totales y parciales).'],
+        ['Pago', 'Mínimo 25% para reservar.'],
+      ],
+    },
+    restrictions: {
+      en: ['Not suitable for pregnant women.', 'Not suitable for people with severe back, hip or knee pain.', 'Not suitable for wheelchair users.', 'Small bags only — no luggage (the crew may refuse boarding if you bring suitcases).', 'Don’t leave belongings on the boat or bus; the company is not responsible for loss or damage.'],
+      es: ['No apta para embarazadas.', 'No apta para personas con dolores severos de espalda, cadera o rodilla.', 'No apta para personas en silla de ruedas.', 'Solo bolsos pequeños, nada de equipaje (el equipo puede negar el abordaje si llevas maletas).', 'No dejes pertenencias en la lancha ni en el autobús: la empresa no se hace responsable por pérdidas o daños.'],
+    },
+    childAges: '3–10',
+    infants: { en: 'Babies (0–2) go free', es: 'Bebés (0–2) gratis' },
+    photos: [
+      { file: 'dominican-republic-1884286_1920.jpg', alt: { en: 'Wooden pier over turquoise water and a palm-lined beach', es: 'Muelle de madera sobre agua turquesa y playa con palmeras' } },
+      { file: 'islacatalina1.jpg', alt: { en: 'White-sand beach with boats in crystal-clear water', es: 'Playa de arena blanca con lanchas en agua cristalina' } },
+    ],
+    pricing: { type: 'person', adult: 85, child: 45 },
+  },
+  {
     slug: 'saona-island',
     featured: true,
     cat: 'islands',

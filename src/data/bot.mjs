@@ -5,7 +5,8 @@
 // Palabras que identifican cada tour. Las frases de varias palabras pesan más.
 export const aliases = {
   'saona-island': ['saona', 'isla saona', 'clasica', 'clasico', 'classic'],
-  'saona-private-speedboat': ['saona', 'lancha privada', 'speedboat', 'privada', 'private boat', 'vip'],
+  'saona-vip-3-beaches': ['saona', 'saona vip', 'vip', '3 playas', 'tres playas', '3 beaches', 'three beaches', 'flamencos', 'playa de los flamencos', 'mano juan', 'playa del canto', 'catuano', 'tortugas', 'turtles', 'langosta', 'lobster'],
+  'saona-private-speedboat': ['saona', 'lancha privada', 'speedboat', 'privada', 'private boat'],
   'saona-private-party-boat': ['saona', 'bote de fiesta', 'party boat', 'grupo grande', 'boda', 'wedding', 'fiesta privada'],
   'catalina-snorkel': ['catalina', 'isla catalina', 'snorkel', 'esnorquel', 'snorkeling'],
   'catalina-diving': ['catalina', 'buceo', 'bucear', 'diving', 'dive', 'scuba'],
@@ -95,7 +96,7 @@ export const bot = {
     recommendIntro: 'Happy to help! What kind of day do you want?',
     kidsTours: 'Family favourites:',
     groupsIntro: 'For groups we have private boats and private tours:',
-    contactInfo: (s) => `📱 WhatsApp / phone: <b>${s.phone}</b><br>✉️ Email: <b>${s.email}</b><br>🕖 ${s.hours}`,
+    contactInfo: (s) => `💬 WhatsApp: <b>${s.whatsappDisplay}</b><br>📞 Phone: <b>${s.phone}</b><br>✉️ Email: <b>${s.email}</b><br>🕖 ${s.hours}`,
     hoursInfo: (s) => `We answer ${s.hours.toLowerCase()} (Dominican Republic time).`,
     chips: { price: 'Price', includes: 'What’s included?', duration: 'How long?', book: 'Book this tour', all: 'See all tours', human: 'Talk to a person', whatsapp: 'Open WhatsApp' },
     catChips: { islands: 'Beach & islands', sea: 'Sea & diving', adventure: 'Adventure', culture: 'Culture', night: 'Nightlife', private: 'Private group' },
@@ -134,6 +135,7 @@ export const bot = {
     didYouMean: (w) => `(I understood “${w}”)`,
     and: 'and',
     groupPrice: 'private price for the whole group',
+    dayWarn: (d) => `Heads up: this tour runs ${d.toLowerCase()} — that date is not available.`,
 
   },
   es: {
@@ -170,7 +172,7 @@ export const bot = {
     recommendIntro: '¡Con gusto! ¿Qué tipo de día quieres?',
     kidsTours: 'Las favoritas de las familias:',
     groupsIntro: 'Para grupos tenemos botes privados y tours privados:',
-    contactInfo: (s) => `📱 WhatsApp / teléfono: <b>${s.phone}</b><br>✉️ Correo: <b>${s.email}</b><br>🕖 ${s.hours}`,
+    contactInfo: (s) => `💬 WhatsApp: <b>${s.whatsappDisplay}</b><br>📞 Teléfono: <b>${s.phone}</b><br>✉️ Correo: <b>${s.email}</b><br>🕖 ${s.hours}`,
     hoursInfo: (s) => `Atendemos ${s.hours.toLowerCase()} (hora de República Dominicana).`,
     chips: { price: 'Precio', includes: '¿Qué incluye?', duration: '¿Cuánto dura?', book: 'Reservar este tour', all: 'Ver todos los tours', human: 'Hablar con una persona', whatsapp: 'Abrir WhatsApp' },
     catChips: { islands: 'Playa e islas', sea: 'Mar y buceo', adventure: 'Aventura', culture: 'Cultura', night: 'Fiesta y noche', private: 'Grupo privado' },
@@ -209,6 +211,7 @@ export const bot = {
     didYouMean: (w) => `(entendí “${w}”)`,
     and: 'y',
     groupPrice: 'precio privado para todo el grupo',
+    dayWarn: (d) => `Ojo: este tour sale ${d.toLowerCase()}; esa fecha no está disponible.`,
 
   },
 };

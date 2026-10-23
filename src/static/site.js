@@ -348,8 +348,12 @@
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      if (!dateInput.value || dateInput.value < dateInput.min) {
+      // Días en que sale el tour (por ejemplo, Saona VIP: lunes a sábado).
+      const days = form.dataset.days ? form.dataset.days.split(',').map(Number) : null;
+      const wrongDay = days && dateInput.value && !days.includes(new Date(dateInput.value + 'T12:00:00').getDay());
+      if (!dateInput.value || dateInput.value < dateInput.min || wrongDay) {
         dateInput.setAttribute('aria-invalid', 'true');
+        dateErr.textContent = wrongDay ? dateErr.dataset.msgDay : dateErr.dataset.msgNeed;
         dateErr.hidden = false;
         dateInput.focus();
         return;

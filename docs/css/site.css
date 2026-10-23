@@ -844,6 +844,22 @@ img.lq { background-size: cover; background-position: center; background-color: 
 .card.is-tilting .card__link::after { opacity: 1; }
 .card.is-tilting .card__link { transition: transform .08s linear, box-shadow .35s var(--ease); }
 
+/* Paradas, horario y extras de un tour */
+.stops, .addons { display: grid; gap: 10px; }
+.stops { counter-reset: stop; }
+.stops li, .addons li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: var(--r-sm); background: var(--white); box-shadow: var(--shadow-1); }
+.stops__ic { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--foam); font-size: 20px; }
+.stops strong, .addons strong { display: block; line-height: 1.35; }
+.stops small, .addons small { display: block; margin-top: 3px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.timeline { position: relative; display: grid; gap: 0; padding-left: 22px; }
+.timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--rd-blue), var(--lagoon), var(--rd-red)); border-radius: 2px; }
+.timeline li { position: relative; display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.timeline li::before { content: ''; position: absolute; left: -21px; top: 16px; width: 12px; height: 12px; border-radius: 50%; background: var(--white); box-shadow: 0 0 0 3px var(--sea); }
+.timeline span { color: var(--muted); text-align: right; }
+.callout--party { background: #fff4dc; }
+.callout--party .i { color: var(--amber); fill: var(--amber); }
+@media (max-width: 640px) { .timeline li { flex-direction: column; gap: 2px; } .timeline span { text-align: left; } }
+
 /* Compartir */
 .tour__title { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .share { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 8px; padding: 10px 18px; border: 0; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1.5px var(--line-2); font-weight: 700; font-size: 14px; transition: box-shadow .2s, transform .2s var(--ease); }

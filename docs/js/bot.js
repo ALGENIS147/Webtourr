@@ -243,6 +243,7 @@
     const when = ctx.date ? fmtDate(ctx.date) : '';
     let html = S.quote(esc(t.title), r.who, when, money(r.total), r.detail);
     if (t.seasonal && ctx.date && ctx.date.getMonth() > 2) html += `<br><br>⚠️ ${S.seasonWarn(fmtMonth(ctx.date.getMonth()))}`;
+    if (t.days && ctx.date && !t.days.includes(ctx.date.getDay())) html += `<br><br>⚠️ ${S.dayWarn(t.daysLabel)}`;
     const params = new URLSearchParams();
     if (ctx.date) params.set('date', iso(ctx.date));
     params.set('guests', String(ctx.adults || total));
@@ -271,7 +272,7 @@
 
   function planReply(days) {
     const kidsMode = ctx.kids > 0;
-    const order = ['saona-island', 'buggy-adventure', 'santo-domingo-colonial-city', 'samana-cayo-levantado', 'catalina-snorkel', 'hacienda-park-7-in-1', 'swim-with-dolphins', 'los-haitises'];
+    const order = ['saona-vip-3-beaches', 'buggy-adventure', 'santo-domingo-colonial-city', 'samana-cayo-levantado', 'catalina-snorkel', 'hacienda-park-7-in-1', 'swim-with-dolphins', 'los-haitises'];
     let pool = order.map((s) => D.tours.find((t) => t.slug === s)).filter(Boolean);
     if (kidsMode) pool = pool.filter((t) => t.kids || t.cat === 'culture');
     if (ctx.budget) pool = pool.filter((t) => perPersonFrom(t) <= ctx.budget).concat(pool.filter((t) => perPersonFrom(t) > ctx.budget));

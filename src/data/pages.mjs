@@ -35,19 +35,19 @@ export const legal = {
       ['Changes', `You can change the date of your experience for free up to ${H} hours before, subject to availability.`],
       ['Cancellations by us', 'If we must cancel because of weather, sea conditions, safety or not enough participants, we will offer you another date or a full refund.'],
       ['Seasonal tours', 'Whale watching depends on the presence of whales in Samaná Bay. Sightings are very likely in season but cannot be guaranteed.'],
-      ['How to cancel', `Write to us on WhatsApp (${site.phone}) or by email (${site.email}) with your booking reference.`],
+      ['How to cancel', `Write to us on WhatsApp (${site.whatsappDisplay}) or by email (${site.email}) with your booking reference.`],
     ]],
     es: ['Política de cancelación y reembolso', [
       ['Cancelaciones del cliente', `Puedes cancelar gratis hasta ${H} horas antes del inicio de la experiencia. Las cancelaciones con menos de ${H} horas o las ausencias no tienen reembolso.`],
       ['Cambios', `Puedes cambiar la fecha gratis hasta ${H} horas antes, según disponibilidad.`],
       ['Cancelaciones nuestras', 'Si debemos cancelar por clima, estado del mar, seguridad o falta de participantes, te ofrecemos otra fecha o el reembolso completo.'],
       ['Tours de temporada', 'El avistamiento de ballenas depende de su presencia en la bahía de Samaná. En temporada es muy probable verlas, pero no se puede garantizar.'],
-      ['Cómo cancelar', `Escríbenos por WhatsApp (${site.phone}) o por correo (${site.email}) con tu número de referencia.`],
+      ['Cómo cancelar', `Escríbenos por WhatsApp (${site.whatsappDisplay}) o por correo (${site.email}) con tu número de referencia.`],
     ]],
   },
   terms: {
     en: ['Terms & conditions', [
-      ['Who we are', `${site.name} is a tour operator based in ${site.base.en}. Contact: ${site.email}, ${site.phone}.`],
+      ['Who we are', `${site.name} is a tour operator based in ${site.base.en}. Contact: ${site.email}, phone ${site.phone}, WhatsApp ${site.whatsappDisplay}.`],
       ['Bookings', 'A booking is confirmed only when we confirm it in writing (WhatsApp or email). Sending a request through this website does not guarantee availability.'],
       ['Prices', 'All prices are in US dollars (USD) and include the items listed on each experience page. Items listed as “not included” are paid separately.'],
       ['Your responsibilities', 'Be ready at the pickup point on time, follow the instructions of guides and captains, and tell us in advance about any medical condition that may affect your participation.'],
@@ -56,7 +56,7 @@ export const legal = {
       ['Law', 'These terms are governed by the laws of the Dominican Republic.'],
     ]],
     es: ['Términos y condiciones', [
-      ['Quiénes somos', `${site.name} es un operador de tours con base en ${site.base.es}. Contacto: ${site.email}, ${site.phone}.`],
+      ['Quiénes somos', `${site.name} es un operador de tours con base en ${site.base.es}. Contacto: ${site.email}, teléfono ${site.phone}, WhatsApp ${site.whatsappDisplay}.`],
       ['Reservas', 'Una reserva queda confirmada solo cuando la confirmamos por escrito (WhatsApp o correo). Enviar una solicitud desde esta web no garantiza disponibilidad.'],
       ['Precios', 'Todos los precios están en dólares estadounidenses (USD) e incluyen lo indicado en cada experiencia. Lo marcado como “no incluye” se paga aparte.'],
       ['Tus responsabilidades', 'Estar a tiempo en el punto de recogida, seguir las indicaciones de guías y capitanes, e informarnos antes de cualquier condición médica que pueda afectar tu participación.'],

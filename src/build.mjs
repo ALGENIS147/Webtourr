@@ -100,6 +100,14 @@ function picture(from, info, alt, { sizes = '100vw', eager = false, cls = '', vt
 }
 const tourImages = (tour) => tour.photos.map((p, i) => ({ ...image(p.file, `${tour.slug}-${i + 1}`, i === 0 ? Q.cover : Q.normal), alt: p.alt }));
 
+// Texto de precio de niños con su rango de edad y bebés.
+function B_childLine(tour, lang) {
+  const p = tour.pricing;
+  const ages = tour.childAges || site.childAges;
+  const kid = lang === 'es' ? `Niños (${ages}): ${money(p.child)}` : `Children (${ages}): ${money(p.child)}`;
+  return tour.infants ? `${kid} · ${tour.infants[lang]}` : kid;
+}
+
 // ---------- precios ----------
 function fromPrice(tour) {
   const p = tour.pricing;
@@ -233,7 +241,8 @@ function footer({ lang, from }) {
     </ul></div>
     <div><h2 class="site-footer__h">${F.contact}</h2>
       <ul class="contact-list">
-        <li>${icon('whatsapp')}<a href="${waLink('')}" target="_blank" rel="noopener">${site.phone}</a></li>
+        <li>${icon('whatsapp')}<a href="${waLink('')}" target="_blank" rel="noopener">${site.whatsappDisplay}</a></li>
+        <li>${icon('phone')}<a href="tel:+${site.phoneDigits}">${site.phone}</a></li>
         <li>${icon('mail')}<a href="mailto:${site.email}">${site.email}</a></li>
         <li>${icon('clock')}<span>${site.hours[lang]}</span></li>
         <li>${icon('pin')}<span>${site.base[lang]}</span></li>
@@ -290,10 +299,10 @@ function card(tour, lang, from, { big = false } = {}) {
 <article class="card${big ? ' card--big' : ''}" data-reveal data-cat="${tour.cat}" data-price="${f.value}" data-search="${esc(`${tour.title.en} ${tour.title.es} ${tour.tagline[lang]} ${places[tour.place].name}`.toLowerCase())}">
   <a class="card__link" href="${href}">
     <div class="card__media">${picture(from, img, img.alt[lang], { vt: `t-${tour.slug}`, sizes: big ? '(min-width: 900px) 50vw, 100vw' : '(min-width: 1100px) 33vw, (min-width: 640px) 50vw, 100vw' })}
-      <span class="chip chip--glass">${categories[tour.cat][lang]}</span>
+      <span class="chip chip--glass">${tour.badge ? `🥇 ${tour.badge[lang]}` : categories[tour.cat][lang]}</span>
     </div>
     <div class="card__body">
-      <p class="card__meta">${icon('pin')}${places[tour.place].name}<span aria-hidden="true">·</span>${icon('clock')}${tour.duration[lang]}</p>
+      <p class="card__meta">${icon('pin')}${places[tour.place].name}<span aria-hidden="true">·</span>${icon('clock')}${tour.duration[lang].split(' · ')[0]}</p>
       <h3 class="card__title">${esc(tour.title[lang])}</h3>
       <p class="card__tag">${esc(tour.tagline[lang])}</p>
       <div class="card__foot">${priceTag(tour, lang)}<span class="card__go" aria-hidden="true">${icon('arrow')}</span></div>
@@ -569,7 +578,7 @@ function bookingWidget(tour, lang) {
     </div>`;
   let fields = '';
   if (p.type === 'person') {
-    fields = stepper('adults', B.adults, 1, 40, 2) + (p.child !== p.adult ? stepper('children', B.children, 0, 20, 0, B.childAges(site.childAges)) : '');
+    fields = stepper('adults', B.adults, 1, 40, 2) + (p.child !== p.adult ? stepper('children', B.children, 0, 20, 0, B.childAges(tour.childAges || site.childAges) + (tour.infants ? ` · ${tour.infants[lang]}` : '')) : '');
   } else if (p.type === 'tiers') {
     const min = p.tiers[0].min;
     const max = p.tiers.at(-1).max;
@@ -602,13 +611,13 @@ function bookingWidget(tour, lang) {
   }
   return `
 <aside class="book" id="book" aria-labelledby="book-title">
-  <form class="book__card" data-booking novalidate>
+  <form class="book__card" data-booking novalidate${tour.days ? ` data-days="${tour.days.join(',')}"` : ''}>
     <div class="book__head">
       <h2 class="book__title" id="book-title">${B.title}</h2>
       ${priceTag(tour, lang)}
     </div>
     <label class="field"><span>${B.date}</span><input type="date" name="date" required data-mindate aria-describedby="date-err"></label>
-    <p class="field-err" id="date-err" hidden>${B.needDate}</p>
+    <p class="field-err" id="date-err" hidden data-msg-need="${esc(B.needDate)}" data-msg-day="${esc(tour.daysLabel ? B.wrongDay(tour.daysLabel[lang]) : '')}">${B.needDate}</p>
     ${fields}
     <div class="book__more">
       <label class="field"><span>${B.name} <small>(${B.optional})</small></span><input type="text" name="name" autocomplete="name"></label>
@@ -677,14 +686,15 @@ function tourPage(tour, lang) {
     <li><a href="${rel(from, pageUrl(lang, 'tours/'))}">${L.nav.tours}</a></li>
     <li aria-current="page">${esc(tour.title[lang])}</li></ol></nav>
   <header class="tour__head">
-    <p class="kicker">${categories[tour.cat][lang]}</p>
+    <p class="kicker">${categories[tour.cat][lang]}${tour.badge ? ` · 🥇 ${tour.badge[lang]}` : ''}</p>
     <div class="tour__title"><h1 class="display display--md">${esc(tour.title[lang])}</h1>
       <button class="share" type="button" data-share data-title="${esc(tour.title[lang])}" data-text="${esc(R.shareText(tour.title[lang]))}" data-done="${esc(R.shared)}">${icon('share')}<span>${R.share}</span></button></div>
     <p class="tour__meta">
       <span>${icon('pin')}${places[tour.place].name}</span>
       <span>${icon('clock')}${tour.duration[lang]}</span>
       ${tour.pricing.type === 'tiers' ? `<span>${icon('users')}${L.book.group(tour.pricing.tiers[0].min, tour.pricing.tiers.at(-1).max)}</span>` : ''}
-      <span>${icon('shield')}${R.cancellationText(site.freeCancelHours)}</span>
+      <span>${icon('shield')}${tour.cancel ? tour.cancel[lang] : R.cancellationText(site.freeCancelHours)}</span>
+      ${tour.daysLabel ? `<span>${icon('clock')}${tour.daysLabel[lang]}</span>` : ''}
     </p>
   </header>
   ${gallery}
@@ -695,19 +705,27 @@ function tourPage(tour, lang) {
       ${tour.season ? `<p class="callout">${icon('sun')}<span><strong>${R.season}:</strong> ${esc(tour.season[lang])}</span></p>` : ''}
       ${tour.note ? `<p class="callout">${icon('info')}<span><strong>${R.note}:</strong> ${esc(tour.note[lang])}</span></p>` : ''}
       <section aria-labelledby="hl"><h2 class="h3" id="hl">${R.highlights}</h2>${list(tour.highlights[lang], 'stars')}</section>
+      ${tour.stops ? `<section aria-labelledby="stops"><h2 class="h3" id="stops">${R.stops}</h2><ol class="stops">${tour.stops[lang].map(([e, t, d]) => `<li><span class="stops__ic" aria-hidden="true">${e}</span><span><strong>${esc(t)}</strong>${d ? `<small>${esc(d)}</small>` : ''}</span></li>`).join('')}</ol></section>` : ''}
+      ${tour.schedule ? `<section aria-labelledby="sched"><h2 class="h3" id="sched">${R.schedule}</h2><ol class="timeline">${tour.schedule[lang].map(([a, b]) => `<li><strong>${esc(a)}</strong><span>${esc(b)}</span></li>`).join('')}</ol></section>` : ''}
       <div class="inc">
         <section aria-labelledby="inc"><h2 class="h3" id="inc">${R.included}</h2>${list(tour.includes[lang], 'ticks')}</section>
         <section aria-labelledby="exc"><h2 class="h3" id="exc">${R.notIncluded}</h2>${list(tour.excludes[lang], 'crosses')}</section>
       </div>
+      ${tour.addons ? `<section aria-labelledby="addons"><h2 class="h3" id="addons">${R.addons}</h2><ul class="addons">${tour.addons[lang].map(([e, t, d]) => `<li><span class="stops__ic" aria-hidden="true">${e}</span><span><strong>${esc(t)}</strong><small>${esc(d)}</small></span></li>`).join('')}</ul></section>` : ''}
+      ${tour.birthday ? `<p class="callout callout--party">${icon('star')}<span>${esc(tour.birthday[lang])}</span></p>` : ''}
       <section aria-labelledby="gtk"><h2 class="h3" id="gtk">${R.goodToKnow}</h2>
         <dl class="facts">
           <div><dt>${R.duration}</dt><dd>${tour.duration[lang]}</dd></div>
+          ${tour.daysLabel ? `<div><dt>${R.days}</dt><dd>${tour.daysLabel[lang]}</dd></div>` : ''}
+          ${tour.infants ? `<div><dt>${R.kidsPrice}</dt><dd>${B_childLine(tour, lang)}</dd></div>` : ''}
           <div><dt>${R.location}</dt><dd>${places[tour.place].name}</dd></div>
           <div><dt>${R.pickup}</dt><dd>${tour.excludes.en.some((x) => /transport/i.test(x)) ? R.noPickup : site.pickupZones[lang]}</dd></div>
           <div><dt>${R.bring}</dt><dd>${R.bringByCat[tour.cat] || R.bringList}</dd></div>
-          <div><dt>${R.cancellation}</dt><dd>${R.cancellationText(site.freeCancelHours)} <a href="${rel(from, pageUrl(lang, 'legal/cancellation/'))}">${legal.cancellation[lang][0]}</a></dd></div>
+          <div><dt>${R.cancellation}</dt><dd>${tour.cancel ? tour.cancel[lang] : R.cancellationText(site.freeCancelHours)} <a href="${rel(from, pageUrl(lang, 'legal/cancellation/'))}">${legal.cancellation[lang][0]}</a></dd></div>
         </dl>
       </section>
+      ${tour.policies ? `<section aria-labelledby="pol"><h2 class="h3" id="pol">${R.policies}</h2><dl class="facts">${tour.policies[lang].map(([a, b]) => `<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join('')}</dl></section>` : ''}
+      ${tour.restrictions ? `<section aria-labelledby="restr"><h2 class="h3" id="restr">${R.restrictions}</h2>${list(tour.restrictions[lang], 'crosses')}</section>` : ''}
     </div>
     ${bookingWidget(tour, lang)}
   </div>
@@ -751,8 +769,8 @@ function contactPage(lang) {
 ${pageHead(C.kicker, C.h1, C.lead)}
 <section class="section section--tight"><div class="wrap contact">
   <ul class="contact__cards">
-    <li data-reveal><a class="ccard ccard--wa" href="${waLink('')}" target="_blank" rel="noopener">${icon('whatsapp')}<span><small>${C.whatsapp}</small><strong>${site.phone}</strong></span></a></li>
-    <li data-reveal><a class="ccard" href="tel:+${site.whatsapp}">${icon('phone')}<span><small>${C.phone}</small><strong>${site.phone}</strong></span></a></li>
+    <li data-reveal><a class="ccard ccard--wa" href="${waLink('')}" target="_blank" rel="noopener">${icon('whatsapp')}<span><small>${C.whatsapp}</small><strong>${site.whatsappDisplay}</strong></span></a></li>
+    <li data-reveal><a class="ccard" href="tel:+${site.phoneDigits}">${icon('phone')}<span><small>${C.phone}</small><strong>${site.phone}</strong></span></a></li>
     <li data-reveal><a class="ccard" href="mailto:${site.email}">${icon('mail')}<span><small>${C.email}</small><strong>${site.email}</strong></span></a></li>
     <li data-reveal><div class="ccard">${icon('clock')}<span><small>${C.hours}</small><strong>${site.hours[lang]}</strong></span></div></li>
     <li data-reveal><div class="ccard">${icon('pin')}<span><small>${C.base}</small><strong>${site.base[lang]}</strong></span></div></li>
@@ -840,7 +858,7 @@ function priceText(tour, lang) {
   if (p.type === 'person') {
     return p.child === p.adult
       ? `${money(p.adult)} ${L.perPerson}`
-      : `${money(p.adult)} ${es ? 'por adulto' : 'per adult'} · ${money(p.child)} ${es ? `por niño (${site.childAges} años)` : `per child (ages ${site.childAges})`}`;
+      : `${money(p.adult)} ${es ? 'por adulto' : 'per adult'} · ${money(p.child)} ${es ? `por niño (${tour.childAges || site.childAges} años)` : `per child (ages ${tour.childAges || site.childAges})`}${tour.infants ? ` · ${tour.infants[lang]}` : ''}`;
   }
   if (p.type === 'tiers') return p.tiers.map((x) => `${L.book.group(x.min, x.max)}: ${money(x.price)} ${x.unit === 'person' ? L.perPerson : x.max <= 2 ? (es ? 'en total' : 'total') : L.perGroup}`).join(' · ');
   if (p.type === 'package') return `${p.options.map((o) => `${o.name[lang]} ${money(o.price)}`).join(' · ')} (${L.perPerson})`;
@@ -854,7 +872,7 @@ function botScript(lang) {
     strings: bot[lang],
     aliases,
     intents,
-    site: { phone: site.phone, email: site.email, whatsapp: site.whatsapp, hours: site.hours[lang], zones: site.pickupZones[lang] },
+    site: { phone: site.phone, whatsappDisplay: site.whatsappDisplay, email: site.email, whatsapp: site.whatsapp, hours: site.hours[lang], zones: site.pickupZones[lang] },
     childAges: site.childAges,
     geo: { lat: places['punta-cana'].lat, lon: places['punta-cana'].lon },
     weatherLabels: T[lang].home.weather,
@@ -883,8 +901,10 @@ function botScript(lang) {
         catName: categories[tr.cat][lang],
         highlights: tr.highlights[lang],
         seasonal: !!tr.season,
+        days: tr.days || null,
+        daysLabel: tr.daysLabel ? tr.daysLabel[lang] : '',
         img: `img/${img.name}-${img.widths[0]}.jpg`,
-        kids: ['saona-island', 'swim-with-dolphins', 'hacienda-park-7-in-1', 'catalina-snorkel', 'samana-cayo-levantado'].includes(tr.slug),
+        kids: ['saona-vip-3-beaches', 'saona-island', 'swim-with-dolphins', 'hacienda-park-7-in-1', 'catalina-snorkel', 'samana-cayo-levantado'].includes(tr.slug),
       };
     }),
   };

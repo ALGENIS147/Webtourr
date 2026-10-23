@@ -4,7 +4,9 @@ export const site = {
   name: 'Harmony Excursions',
   domain: 'https://harmonyexcursions.com',
   phone: '+1 809 251 4054',
-  whatsapp: '18092514054',
+  whatsapp: '18496071995', // número de WhatsApp (sin +, para los enlaces wa.me)
+  whatsappDisplay: '+1 849 607 1995',
+  phoneDigits: '18092514054', // para el enlace tel: de llamadas
   email: 'harmonyexcursions@outlook.com',
   base: { en: 'Punta Cana, Dominican Republic', es: 'Punta Cana, República Dominicana' },
   pickupZones: { en: 'Punta Cana, Bávaro, Cap Cana & Uvero Alto', es: 'Punta Cana, Bávaro, Cap Cana y Uvero Alto' }, // VERIFICAR

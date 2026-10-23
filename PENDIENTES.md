@@ -41,6 +41,13 @@ Reescribí todas. Confirma especialmente:
 - [ ] Delfines: que sea nado con entrenadores.
 - [ ] Coco Bongo: días disponibles (martes a domingo) y si incluye transporte.
 
+## 4b. Isla Saona VIP: 3 Playas (agregada el 23-oct-2026 con tu texto)
+- [ ] Su política es distinta a la general: **75 % de reembolso** cancelando antes de las 5 p. m. del día anterior
+      y **depósito del 25 %**. La web en general dice "cancelación gratis hasta 24 h". Decide si unificas las políticas;
+      mientras tanto, la página de este tour muestra su propia política.
+- [ ] El texto dice que Saona fue elegida para filmar *Piratas del Caribe*: confirma que quieres mantener esa frase.
+- [ ] Fotos: usé el muelle con palmeras y la playa con lanchas (ninguna estaba en otro tour). Cámbialas por fotos reales de este tour cuando las tengas.
+
 ## 5. TripAdvisor — `src/data/site.mjs`
 - [ ] La calificación (4.8) y el número de reseñas (31) se escriben a mano: actualízalos cada mes.
 - [ ] Opcional: genera el widget oficial en tripadvisor.com/Widgets y pega el código en `tripadvisor.widget`.
