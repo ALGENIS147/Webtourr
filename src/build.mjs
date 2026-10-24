@@ -3,6 +3,7 @@
 // Sin dependencias: solo Node y `sips` de macOS para optimizar las fotos.
 import { mkdirSync, writeFileSync, copyFileSync, existsSync, rmSync, readdirSync, statSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site } from './data/site.mjs';
@@ -18,6 +19,10 @@ const OUT = join(ROOT, 'docs');
 const PHOTOS = join(ROOT, 'src/photos');
 const LANGS = ['en', 'es'];
 const YEAR = new Date().getFullYear();
+// Huella del contenido de cada archivo estático (?v=…): si el archivo cambia, cambia la URL
+// y los navegadores no pueden seguir usando la versión vieja guardada en caché.
+const ver = (file) => createHash('sha1').update(readFileSync(join(ROOT, file))).digest('hex').slice(0, 8);
+const V = { css: ver('src/static/site.css'), js: ver('src/static/site.js'), bot: ver('src/static/bot.js') };
 
 // ---------- utilidades ----------
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -174,9 +179,9 @@ function head({ lang, path, from, title, desc, image: og, jsonld = [] }) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Manrope:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="${rel(from, 'css/site.css')}">
-  <script src="${rel(from, 'js/site.js')}" defer></script>
-  <script src="${rel(from, 'js/bot.js')}" defer></script>
+  <link rel="stylesheet" href="${rel(from, 'css/site.css')}?v=${V.css}">
+  <script src="${rel(from, 'js/site.js')}?v=${V.js}" defer></script>
+  <script src="${rel(from, 'js/bot.js')}?v=${V.bot}" defer></script>
   ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join('\n  ')}
 </head>`;
 }
@@ -829,7 +834,7 @@ function notFoundPage() {
   const img = image('Isla-Catalina2.jpg', 'hero-catalina', Q.hero);
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${N.title}</title><meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="/css/site.css"></head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="/css/site.css?v=${V.css}"></head>
 <body class="nf"><main class="nf__in" style="--bg:url('/img/${img.name}-${img.widths.at(-1)}.jpg')"><p class="kicker kicker--light">404</p><h1 class="display">${N.h1}</h1><p class="lead">${N.lead}</p>
 <p class="nf__actions"><a class="btn btn--sand" href="/">${N.cta}</a> <a class="btn btn--ghost-light" href="/es/" lang="es">${E.cta}</a></p></main></body></html>`;
 }
