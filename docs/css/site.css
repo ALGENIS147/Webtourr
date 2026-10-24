@@ -141,14 +141,23 @@ button { cursor: pointer; }
 /* ---------- header ---------- */
 .site-header {
   position: sticky; top: 0; z-index: 50;
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s, color .3s;
+}
+/* El vidrio difuminado va en una capa aparte: si estuviera en la cabecera misma, el menú del
+   celular (position: fixed) quedaría encerrado dentro de la cabecera en vez de cubrir la pantalla. */
+.site-header::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: rgb(251 248 243 / .82);
   backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
-  border-bottom: 1px solid transparent;
-  transition: background-color .3s, border-color .3s, color .3s;
+  transition: opacity .3s;
 }
 .site-header.is-scrolled { border-bottom-color: var(--line); }
 .site-header__in { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--header-h); }
-.is-home .site-header:not(.is-scrolled) { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; color: var(--white); }
+.is-home .site-header:not(.is-scrolled) { color: var(--white); }
+.is-home .site-header:not(.is-scrolled)::before { opacity: 0; }
+body.menu-open .site-header::before { opacity: 0; }
+body.menu-open .site-header { view-transition-name: none; border-bottom-color: transparent; }
 .is-home .site-header { position: fixed; inset-inline: 0; }
 
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
