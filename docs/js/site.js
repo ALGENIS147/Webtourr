@@ -54,7 +54,6 @@
   const wx = $('[data-wx]');
   if (wx) {
     const labels = JSON.parse(wx.dataset.labels);
-    const icon = (c) => (c <= 1 ? '☀️' : c <= 2 ? '⛅' : c <= 3 ? '☁️' : c < 50 ? '🌫️' : c < 80 ? '🌧️' : c < 95 ? '🌦️' : '⛈️');
     const label = (c) => labels[[95, 80, 61, 51, 45, 3, 2, 1, 0].find((k) => c >= k)];
     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${wx.dataset.lat}&longitude=${wx.dataset.lon}&current=temperature_2m,weather_code&timezone=America%2FSanto_Domingo`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
@@ -62,7 +61,7 @@
         const c = d.current.weather_code;
         const t = Math.round(d.current.temperature_2m);
         const f = Math.round(t * 9 / 5 + 32);
-        wx.textContent = `${icon(c)} ${t}°C / ${f}°F`;
+        wx.textContent = `${t}°C / ${f}°F`;
         wx.title = label(c);
       })
       .catch(() => {}); // sin clima no pasa nada: el reloj sigue funcionando

@@ -710,13 +710,13 @@ function tourPage(tour, lang) {
       ${tour.season ? `<p class="callout">${icon('sun')}<span><strong>${R.season}:</strong> ${esc(tour.season[lang])}</span></p>` : ''}
       ${tour.note ? `<p class="callout">${icon('info')}<span><strong>${R.note}:</strong> ${esc(tour.note[lang])}</span></p>` : ''}
       <section aria-labelledby="hl"><h2 class="h3" id="hl">${R.highlights}</h2>${list(tour.highlights[lang], 'stars')}</section>
-      ${tour.stops ? `<section aria-labelledby="stops"><h2 class="h3" id="stops">${R.stops}</h2><ol class="stops">${tour.stops[lang].map(([e, t, d]) => `<li><span class="stops__ic" aria-hidden="true">${e}</span><span><strong>${esc(t)}</strong>${d ? `<small>${esc(d)}</small>` : ''}</span></li>`).join('')}</ol></section>` : ''}
+      ${tour.stops ? `<section aria-labelledby="stops"><h2 class="h3" id="stops">${R.stops}</h2><ol class="stops">${tour.stops[lang].map(([t, d], i) => `<li><span class="stops__ic stops__ic--n" aria-hidden="true">${i + 1}</span><span><strong>${esc(t)}</strong>${d ? `<small>${esc(d)}</small>` : ''}</span></li>`).join('')}</ol></section>` : ''}
       ${tour.schedule ? `<section aria-labelledby="sched"><h2 class="h3" id="sched">${R.schedule}</h2><ol class="timeline">${tour.schedule[lang].map(([a, b]) => `<li><strong>${esc(a)}</strong><span>${esc(b)}</span></li>`).join('')}</ol></section>` : ''}
       <div class="inc">
         <section aria-labelledby="inc"><h2 class="h3" id="inc">${R.included}</h2>${list(tour.includes[lang], 'ticks')}</section>
         <section aria-labelledby="exc"><h2 class="h3" id="exc">${R.notIncluded}</h2>${list(tour.excludes[lang], 'crosses')}</section>
       </div>
-      ${tour.addons ? `<section aria-labelledby="addons"><h2 class="h3" id="addons">${R.addons}</h2><ul class="addons">${tour.addons[lang].map(([e, t, d]) => `<li><span class="stops__ic" aria-hidden="true">${e}</span><span><strong>${esc(t)}</strong><small>${esc(d)}</small></span></li>`).join('')}</ul></section>` : ''}
+      ${tour.addons ? `<section aria-labelledby="addons"><h2 class="h3" id="addons">${R.addons}</h2><ul class="addons">${tour.addons[lang].map(([t, d]) => `<li><span class="stops__ic" aria-hidden="true">${icon('plus')}</span><span><strong>${esc(t)}</strong><small>${esc(d)}</small></span></li>`).join('')}</ul></section>` : ''}
       ${tour.birthday ? `<p class="callout callout--party">${icon('star')}<span>${esc(tour.birthday[lang])}</span></p>` : ''}
       <section aria-labelledby="gtk"><h2 class="h3" id="gtk">${R.goodToKnow}</h2>
         <dl class="facts">

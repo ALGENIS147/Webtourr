@@ -857,7 +857,9 @@ img.lq { background-size: cover; background-position: center; background-color: 
 .stops, .addons { display: grid; gap: 10px; }
 .stops { counter-reset: stop; }
 .stops li, .addons li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: var(--r-sm); background: var(--white); box-shadow: var(--shadow-1); }
-.stops__ic { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--foam); font-size: 20px; }
+.stops__ic { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--foam); color: var(--sea); }
+.stops__ic .i { width: 18px; height: 18px; }
+.stops__ic--n { background: var(--ink); color: var(--white); font: 600 16px/1 var(--f-display); }
 .stops strong, .addons strong { display: block; line-height: 1.35; }
 .stops small, .addons small { display: block; margin-top: 3px; color: var(--muted); font-size: 14px; line-height: 1.45; }
 .timeline { position: relative; display: grid; gap: 0; padding-left: 22px; }
